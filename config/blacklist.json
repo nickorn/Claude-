@@ -1,0 +1,22 @@
+{
+  "_comment": "Seed list of potentially unclear terms (Art. 84 EPC / § 34 PatG / 35 USC 112). Amend freely. Matching is whole-word, case-insensitive.",
+  "en": [
+    "about", "approximately", "substantially", "essentially", "generally", "relatively",
+    "e.g.", "for example", "such as", "for instance", "like", "i.e.",
+    "preferably", "optionally", "possibly", "may", "can", "if desired",
+    "and/or", "etc.", "or the like", "and the like", "similar", "type",
+    "high", "low", "thin", "thick", "large", "small", "rapid", "fast", "slow", "strong", "weak",
+    "sufficient", "suitable", "adequate", "appropriate", "conventional", "standard", "normal",
+    "means for", "arranged to", "adapted to",
+    "at least partially", "mainly", "predominantly", "virtually", "nearly", "around"
+  ],
+  "de": [
+    "etwa", "ungefähr", "circa", "ca.", "im Wesentlichen", "weitgehend", "überwiegend", "nahezu", "annähernd", "relativ", "vergleichsweise",
+    "z. B.", "z.B.", "beispielsweise", "zum Beispiel", "wie etwa", "insbesondere", "d. h.", "d.h.", "bzw.",
+    "vorzugsweise", "bevorzugt", "optional", "gegebenenfalls", "ggf.", "eventuell", "kann", "können",
+    "und/oder", "usw.", "o. Ä.", "oder dergleichen", "und dergleichen", "ähnlich", "artig",
+    "hoch", "niedrig", "dünn", "dick", "groß", "klein", "schnell", "langsam", "stark", "schwach",
+    "ausreichend", "geeignet", "angemessen", "herkömmlich", "üblich", "normal",
+    "Mittel zum", "zumindest teilweise", "hauptsächlich"
+  ]
+}

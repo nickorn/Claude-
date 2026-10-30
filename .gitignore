@@ -1,6 +1,6 @@
-# Office lock/temp files
+build/*.dotm
+build/tmp/
 ~$*
 *.tmp
-# OS files
 .DS_Store
 Thumbs.db

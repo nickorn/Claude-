@@ -1,28 +1,22 @@
-# Word Macro (VBA) Project
+# Patent-Tools (Word)
 
-Versioned source for Microsoft Word macros written in VBA.
+Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neunummerierung, Anspruchsprüfung, Formatierung, Reinschrift/markierte Fassung, Textbausteine, Entwurfshelfer.
 
-## Layout
+- Anforderungen & Entscheidungen: `docs/project-context.md`
+- Arbeitsanweisungen für Claude Code: `CLAUDE.md`
+- Referenzmaterial: `docs/reference/` (EP 20 187 485.6)
 
-| Path            | Contents                                              |
-|-----------------|-------------------------------------------------------|
-| `src/modules/`  | Standard modules exported from the VBA editor (`.bas`) |
-| `src/classes/`  | Class modules (`.cls`)                                 |
-| `src/forms/`    | UserForms (`.frm` + binary `.frx`)                     |
-| `docs/setup/`   | Setup instructions and project goals                  |
+## Mit Claude Code starten
+```
+cd patent-tools
+git init && git add . && git commit -m "Initial project context"
+claude
+```
+Erster Prompt z. B.: „Lies CLAUDE.md und docs/project-context.md und setze MVP-1 (Neunummerierung) um.“
 
-## Versioning workflow
+## Installation (später, durch IT)
+1. `build/PatentTools.dotm` in den Word-STARTUP-Ordner kopieren (`%APPDATA%\Microsoft\Word\STARTUP`).
+2. Beim ersten Start legt das Makro `%APPDATA%\PatentTools\` mit `settings.json`, `blacklist.json` und `textblocks\` an (Vorlagen aus `config/`).
 
-Word stores macros inside binary `.docm` / `.dotm` files, which git cannot diff.
-Keep the source of truth here as exported text files:
-
-1. In Word, open the VBA editor (`Alt+F11`).
-2. Edit your macros.
-3. Export each changed module (right-click → *Export File…*) into the matching `src/` folder.
-4. Commit the exported files.
-
-To load macros into a document or template, import the files from `src/`
-(right-click the project → *Import File…*) and save as `.docm` or `.dotm`.
-
-VBA files must use Windows (CRLF) line endings for import to work.
-`.gitattributes` enforces this.
+## Build
+`src/` ist die Quelle. Ein Build-Skript erzeugt den .dotm-Container mit Ribbon-XML; die VBA-Module werden einmalig im VBA-Editor importiert (Alt+F11 → Datei importieren) und die .dotm gespeichert.

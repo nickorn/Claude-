@@ -1,0 +1,82 @@
+{
+  "version": "0.1.0",
+  "language": {
+    "ui": "de",
+    "claimLanguageDetection": "auto"
+  },
+  "format": {
+    "fontName": "Arial",
+    "fontSize": 11,
+    "lineSpacing": 1.5,
+    "spaceBefore": 0,
+    "spaceAfter": 0,
+    "subFeatureIndentCm": 1.25,
+    "applyToWholeDocument": true
+  },
+  "claims": {
+    "labelPattern": "^\\d+[0-9A-Za-z.]*$",
+    "separator": "TAB",
+    "emptyParagraphsBetweenClaims": 1
+  },
+  "punctuation": {
+    "featureEnd": ";",
+    "lastFeatureEnd": ".",
+    "enforceAndBeforeLastFeature": true,
+    "flagWhereinAfterFullStop": true
+  },
+  "referenceSigns": {
+    "style": "parentheses",
+    "multipleSeparator": ", ",
+    "normaliseSemicolon": true
+  },
+  "renumber": {
+    "trackChangesMode": "silent"
+  },
+  "check": {
+    "commentAuthor": "PatentCheck",
+    "enabled": {
+      "numbering": true,
+      "punctuation": true,
+      "spacing": true,
+      "formatting": true,
+      "backReferences": true,
+      "independentClaims": true,
+      "multipleDependencies": true,
+      "antecedentBasis": true,
+      "referenceSigns": true,
+      "blacklist": true,
+      "categories": true
+    },
+    "highlightColors": {
+      "numbering": "wdRed",
+      "punctuation": "wdYellow",
+      "spacing": "wdGray25",
+      "formatting": "wdGray25",
+      "backReferences": "wdPink",
+      "independentClaims": "wdPink",
+      "multipleDependencies": "wdTurquoise",
+      "antecedentBasis": "wdBrightGreen",
+      "referenceSigns": "wdTeal",
+      "blacklist": "wdViolet",
+      "categories": "wdDarkYellow"
+    }
+  },
+  "footer": {
+    "status": {
+      "de": { "markedUp": "Markierte Fassung", "clean": "Reinschrift", "inventorApproved": "Vom Erfinder freigegeben" },
+      "en": { "markedUp": "Marked-up version", "clean": "Clean version", "inventorApproved": "Approved by inventor" }
+    },
+    "touchRightFooter": false
+  },
+  "description": {
+    "introPhrases": {
+      "en": ["According to a first embodiment, ", "According to an embodiment, ", "In examples, "],
+      "de": ["Gemäß einer ersten Ausführungsform ", "Gemäß einer Ausführungsform ", "In Beispielen "]
+    }
+  },
+  "textblocks": {
+    "folder": "%APPDATA%\\PatentTools\\textblocks",
+    "askForPlaceholders": true,
+    "highlightUnfilledPlaceholders": true
+  }
+}

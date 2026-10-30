@@ -6,3 +6,5 @@
 *.docm binary
 *.dotm binary
 *.docx binary
+*.pdf binary
+*.png binary

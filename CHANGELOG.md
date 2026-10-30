@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- R2-2 decided: renumbering records changes as tracked changes (`renumber.trackChangesMode` default "tracked").
+
 ## [0.1.0] – 2026-10-30
 ### Added
 - Project context from Q&A rounds 1 (Q1–60) and 2 (R2-1–14).

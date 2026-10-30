@@ -46,6 +46,7 @@ Status: living document. Round 1 (Q1-60) and round 2 (R2-1 to R2-14) answered on
 - Accepted label grammar: digits followed by any mix of letters, digits and dots (e.g. 1, 1a, 1.1, 1a.1, 1a1, 12b.3). Duplicate labels are an error: abort and report, do not guess.
 - The renumbering macro converts these into a clean consecutive integer sequence and updates every back-reference ("claim 1a", "claims 1.1 to 3", "any one of claims 1a or 2", "Anspruch 1a", "einem der Ansprüche 1 bis 3").
 - Ranges ("claims 1 to 3", "Ansprüche 1a bis 4") are resolved by document position after renumbering; if a range becomes non-contiguous or unclear, it is rewritten as far as safe and flagged with a comment.
+- Track Changes (R2-2, decided 30.10.2026): number and back-reference changes are RECORDED AS TRACKED CHANGES (`renumber.trackChangesMode = "tracked"`). The setting can be switched to "silent" in settings.json.
 
 ## 5. Final claim check (wanted)
 - Claim numbering: consecutive, no gaps or duplicates, no supplementary numbers left over.
@@ -113,7 +114,6 @@ Tab "Patent-Tools" with these groups:
 - The remaining pages of EP 20 187 485.6 (once uploaded) serve as the first real-world test case; Claude decides what the checks should catch there.
 
 ## 11. Open points [OPEN]
-- R2-2: Renumbering while Track Changes is on: should number changes be recorded as tracked changes or applied silently? (asked again in chat)
 - Text-block naming scheme: confirm the proposed scheme or supply your own.
 - Remaining pages of the reference application to be uploaded.
 

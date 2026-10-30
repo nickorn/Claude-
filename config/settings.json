@@ -30,7 +30,7 @@
     "normaliseSemicolon": true
   },
   "renumber": {
-    "trackChangesMode": "silent"
+    "trackChangesMode": "tracked"
   },
   "check": {
     "commentAuthor": "PatentCheck",

@@ -23,6 +23,7 @@ Owner/user: Niklas (Patentanwaltskandidat). Later possibly colleagues.
 - Sub-features: indent only (no dashes/letters); indent depth = constant at top of module, mirrored in settings.json.
 - Between claims: exactly one empty paragraph.
 - Formatting everywhere: Arial 11 pt, line spacing 1.5, space before/after 0.
+- Renumbering records number/back-reference changes as tracked changes (setting `renumber.trackChangesMode`, default "tracked").
 - Footer left: status text by macro, language = claim language. Footer right: application number, typed by hand – NEVER touch it.
 
 ## Repository layout
@@ -56,7 +57,6 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 7. Method ↔ apparatus, claims → description, reference signs strip/insert.
 
 ## Open points (ask Niklas before deciding)
-- Renumbering with Track Changes on: record number changes as tracked or apply silently? (proposal: setting, default = silent)
 - Text-block naming scheme `NN_Label.docx` per subfolder – awaiting confirmation.
 
 ## Working rules for Claude

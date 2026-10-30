@@ -15,13 +15,13 @@ Status: living document. Round 1 (Q1-60) and round 2 (R2-1 to R2-14) answered on
 - Microsoft Office LTSC Standard 2024 (Word desktop, Windows).
 - VBA is allowed; macros are unsigned.
 - IT does the installs. Delivery is ONE global template (.dotm) with customUI ribbon XML, placed in the Word STARTUP folder.
-- Build approach: the source of truth is plain-text modules (.bas/.cls/.frm) plus customUI XML. Claude builds the .dotm container with the ribbon. The VBA modules are imported once into the .dotm in the VBA editor, because vbaProject.bin can only be created reliably by Office itself.
+- Build approach: the source of truth is plain-text modules (.bas/.cls/.frm) plus customUI XML. Claude builds the .dotm container with the ribbon. The VBA modules are imported into the .dotm in Word (helper macro `PT_ImportModules`), because vbaProject.bin can only be created reliably by Office itself.
 - There are no existing firm macros or templates to coexist with.
 - DMS: PatOrg, with no naming rules.
 - STRICTLY OFFLINE: no network or API calls of any kind (confidentiality).
 - UI language: German (ribbon labels, messages, report texts).
 - Code language: English identifiers and English comments; `Option Explicit` everywhere; one module per feature with a prefix (e.g. `modRenumber`, `modCheckAntecedent`).
-- Settings: JSON files in `%APPDATA%\PatentTools\` (`settings.json`, `blacklist.json`, `textblocks\`). Parsed with an embedded MIT-licensed VBA JSON parser (offline). Defaults are created on first run.
+- Settings: JSON files in `%APPDATA%\PatentTools\` (`settings.json`, `blacklist.json`, `textblocks\`). Parsed with an embedded VBA JSON parser (own code `modJson`, offline). Defaults are created on first run.
 - Versioning: Git-style source folder and a CHANGELOG; the version number is shown in the ribbon's "Info" button.
 - Icons: built-in imageMso where an icon clearly describes the function, otherwise custom PNG icons embedded in the .dotm.
 
@@ -76,7 +76,7 @@ Status: living document. Round 1 (Q1-60) and round 2 (R2-1 to R2-14) answered on
 - Firm texts are confidential, so Claude ships NO firm content, only neutral example blocks as templates; Niklas fills in his own.
 - Blocks are read from files, never hard-coded: folder `%APPDATA%\PatentTools\textblocks\` (path changeable in settings.json, e.g. later a shared network drive for colleagues).
 - One .docx per block (keeps formatting). Subfolders become ribbon submenus: `EPA\`, `DPMA\`, `PCT_EESR\`, `Allgemein\`.
-- File name = menu label; optional numeric prefix for sorting, e.g. `10_Einleitung Art. 94(3) EPÜ.docx` -> shown as "Einleitung Art. 94(3) EPÜ". Final naming scheme to be confirmed by Niklas [OPEN].
+- File name = menu label; optional numeric prefix for sorting, e.g. `10_Einleitung Art. 94(3) EPÜ.docx` -> shown as "Einleitung Art. 94(3) EPÜ". Naming scheme confirmed by Niklas on 30.10.2026.
 - The menu is built dynamically (getContent callback) every time it opens, so new files appear without restarting Word.
 - Placeholders in square brackets ([DATUM], [D1], [MERKMAL], [ANSPRUCH]) are optionally asked for in an input dialog on insert; unfilled ones are highlighted.
 - Claude provides example blocks (EPO: Art. 94(3) opening, main/auxiliary requests, oral proceedings as precaution, Art. 84, Art. 54, Art. 56 problem-solution skeleton, adaptation of description; DPMA: Eingabe zum Prüfungsbescheid, § 3/§ 4 PatG, Anhörung, Haupt-/Hilfsantrag; PCT/EESR: Rule 70a/161 EPC, Art. 19/34 PCT, WO-ISA reply).
@@ -114,7 +114,6 @@ Tab "Patent-Tools" with these groups:
 - The remaining pages of EP 20 187 485.6 (once uploaded) serve as the first real-world test case; Claude decides what the checks should catch there.
 
 ## 11. Open points [OPEN]
-- Text-block naming scheme: confirm the proposed scheme or supply your own.
 - Remaining pages of the reference application to be uploaded.
 
 ## Reference material in project

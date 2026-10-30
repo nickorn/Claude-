@@ -1,0 +1,485 @@
+#flags 12
+Claims
+1.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+2.	The method of claim 1, wherein the state is cached.
+
+3.	The method of claim 1 or 2, further comprising a timer.
+
+4.	The method of claim 2, wherein the state is cached.
+
+5.	The method of claim 1, wherein the state is cached.
+
+6.	The method of claim 2, wherein the state is cached.
+
+7.	The method of any one of claims 5 to 6, wherein the node is mobile.
+
+8.	The method of claim 2, wherein the state is cached.
+
+9.	The method of claim 3 or 3, further comprising a timer.
+
+10.	The method of claim 3, further comprising:
+repeating the determining according to claim 2.
+
+11.	The method of any one of claims 3 to 4, wherein the node is mobile.
+
+12.	The method of claim 10, wherein the state is cached.
+
+13.	The method of claim 3, wherein the state is cached.
+
+14.	The method of claim 1, further comprising:
+repeating the determining according to claim 11.
+
+15.	The method of claim 4, further comprising:
+repeating the determining according to claim 6.
+
+16.	The method of claim 12, further comprising:
+repeating the determining according to claim 2.
+
+17.	The method of claim 1, wherein the state is cached.
+
+18.	The method of any one of claims 17 to 17, wherein the node is mobile.
+
+19.	The method of claim 15, wherein the state is cached.
+
+20.	The method of claim 6 or 16, further comprising a timer.
+
+21.	The method of claim 17, wherein the state is cached.
+
+22.	The method of claim 2, wherein the state is cached.
+
+23.	The method of claim 9, wherein the state is cached.
+
+24.	The method of claim 7 or 12, further comprising a timer.
+
+25.	The method of claim 6 or 21, further comprising a timer.
+
+26.	The method of claim 23, wherein the state is cached.
+
+27.	The method of claim 10, wherein the state is cached.
+
+28.	The method of claim 2 or 12, further comprising a timer.
+
+29.	The method of claim 20, wherein the state is cached.
+
+30.	The method of claim 16, wherein the state is cached.
+
+31.	The method of any one of claims 29 to 30, wherein the node is mobile.
+
+32.	The method of claim 5, wherein the state is cached.
+
+33.	The method of claim 2, wherein the state is cached.
+
+34.	The method of claim 2 or 26, further comprising a timer.
+
+35.	The method of claim 6 or 26, further comprising a timer.
+
+36.	The method of claim 29, wherein the state is cached.
+
+37.	The method of claim 21 or 31, further comprising a timer.
+
+38.	The method of claim 1, further comprising:
+repeating the determining according to claim 32.
+
+39.	The method of claim 29, wherein the state is cached.
+
+40.	The method of claim 22, wherein the state is cached.
+
+41.	The method of claim 27, wherein the state is cached.
+
+42.	The method of claim 30, further comprising:
+repeating the determining according to claim 27.
+
+43.	The method of claim 26, wherein the state is cached.
+
+44.	The method of claim 7 or 28, further comprising a timer.
+
+45.	The method of claim 7, wherein the state is cached.
+
+46.	The method of claim 20, wherein the state is cached.
+
+47.	The method of claim 36, wherein the state is cached.
+
+48.	The method of any one of claims 17 to 42, wherein the node is mobile.
+
+49.	The method of claim 40, wherein the state is cached.
+
+50.	The method of claim 6, wherein the state is cached.
+
+51.	The method of claim 6 or 48, further comprising a timer.
+
+52.	The method of claim 16 or 17, further comprising a timer.
+
+53.	The method of claim 30, further comprising:
+repeating the determining according to claim 14.
+
+54.	The method of claim 1 or 28, further comprising a timer.
+
+55.	The method of claim 18, wherein the state is cached.
+
+56.	The method of claim 22 or 47, further comprising a timer.
+
+57.	The method of any one of claims 1 to 53, wherein the node is mobile.
+
+58.	The method of claim 4, wherein the state is cached.
+
+59.	The method of claim 44 or 51, further comprising a timer.
+
+60.	The method of any one of claims 15 to 35, wherein the node is mobile.
+
+61.	The method of claim 31, wherein the state is cached.
+
+62.	The method of claim 8, wherein the state is cached.
+
+63.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+64.	The method of claim 19, wherein the state is cached.
+
+65.	The method of claim 20, wherein the state is cached.
+
+66.	The method of claim 1, wherein the state is cached.
+
+67.	The method of claim 38, further comprising:
+repeating the determining according to claim 59.
+
+68.	The method of claim 55, wherein the state is cached.
+
+69.	The method of claim 16, wherein the state is cached.
+
+70.	The method of claim 29 or 55, further comprising a timer.
+
+71.	The method of claim 54, wherein the state is cached.
+
+72.	The method of claim 56, further comprising:
+repeating the determining according to claim 34.
+
+73.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+74.	The method of any one of claims 68 to 70, wherein the node is mobile.
+
+75.	The method of claim 58 or 72, further comprising a timer.
+
+76.	The method of claim 62, wherein the state is cached.
+
+77.	The method of claim 40, wherein the state is cached.
+
+78.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+79.	The method of claim 20, wherein the state is cached.
+
+80.	The method of claim 30, wherein the state is cached.
+
+81.	The method of claim 45, wherein the state is cached.
+
+82.	The method of any one of claims 36 to 47, wherein the node is mobile.
+
+83.	The method of claim 46 or 74, further comprising a timer.
+
+84.	The method of claim 51, wherein the state is cached.
+
+85.	The method of claim 29, wherein the state is cached.
+
+86.	The method of claim 24, wherein the state is cached.
+
+87.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+88.	The method of claim 54, further comprising:
+repeating the determining according to claim 4.
+
+89.	The method of any one of claims 10 to 83, wherein the node is mobile.
+
+90.	The method of claim 27, wherein the state is cached.
+
+91.	The method of claim 14, wherein the state is cached.
+
+92.	The method of claim 77, further comprising:
+repeating the determining according to claim 64.
+
+93.	The method of claim 82, wherein the state is cached.
+
+94.	The method of claim 27 or 47, further comprising a timer.
+
+95.	The method of claim 87, wherein the state is cached.
+
+96.	The method of claim 60, wherein the state is cached.
+
+97.	The method of any one of claims 12 to 13, wherein the node is mobile.
+
+98.	The method of claim 66, further comprising:
+repeating the determining according to claim 47.
+
+99.	The method of claim 35, wherein the state is cached.
+
+100.	The method of claim 17 or 46, further comprising a timer.
+
+101.	The method of any one of claims 100 to 100, wherein the node is mobile.
+
+102.	The method of claim 19 or 40, further comprising a timer.
+
+103.	The method of claim 97, wherein the state is cached.
+
+104.	The method of claim 55, further comprising:
+repeating the determining according to claim 55.
+
+105.	The method of claim 30, wherein the state is cached.
+
+106.	The method of claim 34, wherein the state is cached.
+
+107.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+108.	The method of claim 49, wherein the state is cached.
+
+109.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+110.	The method of any one of claims 19 to 53, wherein the node is mobile.
+
+111.	The method of claim 14, wherein the state is cached.
+
+112.	The method of claim 47, wherein the state is cached.
+
+113.	The method of claim 62, wherein the state is cached.
+
+114.	The method of any one of claims 57 to 57, wherein the node is mobile.
+
+115.	The method of claim 103, wherein the state is cached.
+
+116.	The method of claim 91, wherein the state is cached.
+
+117.	The method of any one of claims 54 to 84, wherein the node is mobile.
+
+118.	The method of claim 87, further comprising:
+repeating the determining according to claim 71.
+
+119.	The method of claim 39, wherein the state is cached.
+
+120.	The method of any one of claims 115 to 118, wherein the node is mobile.
+
+121.	The method of claim 75, wherein the state is cached.
+
+122.	The method of any one of claims 75 to 115, wherein the node is mobile.
+
+123.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+124.	The method of claim 105, wherein the state is cached.
+
+125.	The method of claim 106, further comprising:
+repeating the determining according to claim 52.
+
+126.	The method of claim 68, wherein the state is cached.
+
+127.	The method of claim 112, wherein the state is cached.
+
+128.	The method of any one of claims 110 to 118, wherein the node is mobile.
+
+129.	The method of claim 93, wherein the state is cached.
+
+130.	The method of claim 96, wherein the state is cached.
+
+131.	The method of claim 116, wherein the state is cached.
+
+132.	The method of claim 72, wherein the state is cached.
+
+133.	The method of claim 108, wherein the state is cached.
+
+134.	The method of claim 16, wherein the state is cached.
+
+135.	The method of claim 54 or 70, further comprising a timer.
+
+136.	The method of claim 8, wherein the state is cached.
+
+137.	The method of claim 131, wherein the state is cached.
+
+138.	The method of claim 96, wherein the state is cached.
+
+139.	The method of claim 134, wherein the state is cached.
+
+140.	The method of any one of claims 49 to 114, wherein the node is mobile.
+
+141.	The method of any one of claims 19 to 87, wherein the node is mobile.
+
+142.	The method of claim 97, wherein the state is cached.
+
+143.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+144.	The method of claim 138, wherein the state is cached.
+
+145.	The method of claim 53, wherein the state is cached.
+
+146.	The method of claim 115, wherein the state is cached.
+
+147.	The method of claim 67 or 109, further comprising a timer.
+
+148.	The method of claim 95, wherein the state is cached.
+
+149.	The method of any one of claims 141 to 142, wherein the node is mobile.
+
+150.	The method of claim 87 or 124, further comprising a timer.
+
+151.	The method of claim 107, wherein the state is cached.
+
+152.	The method of claim 47 or 47, further comprising a timer.
+
+153.	The method of claim 42, wherein the state is cached.
+
+154.	The method of claim 75, wherein the state is cached.
+
+155.	The method of any one of claims 6 to 112, wherein the node is mobile.
+
+156.	The method of claim 51, further comprising:
+repeating the determining according to claim 20.
+
+157.	The method of claim 2, further comprising:
+repeating the determining according to claim 14.
+
+158.	The method of claim 136, wherein the state is cached.
+
+159.	The method of claim 31 or 146, further comprising a timer.
+
+160.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+161.	The method of claim 18 or 103, further comprising a timer.
+
+162.	The method of claim 139, wherein the state is cached.
+
+163.	The method of claim 46, wherein the state is cached.
+
+164.	The method of claim 62, further comprising:
+repeating the determining according to claim 51.
+
+165.	The method of any one of claims 128 to 135, wherein the node is mobile.
+
+166.	The method of claim 162, further comprising:
+repeating the determining according to claim 22.
+
+167.	The method of claim 48 or 148, further comprising a timer.
+
+168.	The method of claim 29, wherein the state is cached.
+
+169.	The method of claim 92, wherein the state is cached.
+
+170.	The method of claim 160, wherein the state is cached.
+
+171.	The method of claim 8, wherein the state is cached.
+
+172.	The method of claim 77, further comprising:
+repeating the determining according to claim 125.
+
+173.	The method of claim 135 or 146, further comprising a timer.
+
+174.	The method of claim 64 or 68, further comprising a timer.
+
+175.	The method of claim 77 or 171, further comprising a timer.
+
+176.	The method of claim 8, wherein the state is cached.
+
+177.	The method of claim 98, wherein the state is cached.
+
+178.	The method of claim 68, wherein the state is cached.
+
+179.	The method of claim 8, wherein the state is cached.
+
+180.	The method of claim 37, wherein the state is cached.
+
+181.	The method of claim 23, wherein the state is cached.
+
+182.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+183.	The method of claim 129, wherein the state is cached.
+
+184.	The method of claim 93, wherein the state is cached.
+
+185.	The method of claim 55, wherein the state is cached.
+
+186.	The method of claim 86 or 181, further comprising a timer.
+
+187.	The method of claim 98 or 165, further comprising a timer.
+
+188.	The method of claim 77, wherein the state is cached.
+
+189.	The method of claim 2 or 42, further comprising a timer.
+
+190.	The method of any one of claims 83 to 151, wherein the node is mobile.
+
+191.	The method of claim 120, further comprising:
+repeating the determining according to claim 142.
+
+192.	The method of claim 53, wherein the state is cached.
+
+193.	The method of any one of claims 80 to 160, wherein the node is mobile.
+
+194.	A method for operating a node, the method comprising:
+determining a state;
+transmitting the state.
+
+195.	The method of claim 7, wherein the state is cached.
+
+196.	The method of claim 180, wherein the state is cached.
+
+197.	The method of any one of claims 98 to 191, wherein the node is mobile.
+
+198.	The method of claim 42, wherein the state is cached.
+
+199.	The method of claim 31 or 198, further comprising a timer.
+
+200.	The method of claim 43, further comprising:
+repeating the determining according to claim 153.
+
+201.	The method of claim 139, further comprising:
+repeating the determining according to claim 50.
+
+202.	The method of claim 6 or 114, further comprising a timer.
+
+203.	The method of claim 46 or 140, further comprising a timer.
+
+204.	The method of claim 18, wherein the state is cached.
+
+205.	The method of any one of claims 132 to 172, wherein the node is mobile.
+
+206.	The method of claim 82, wherein the state is cached.
+
+207.	The method of claim 32, wherein the state is cached.
+
+208.	The method of claim 177, wherein the state is cached.
+
+209.	The method of claim 86, wherein the state is cached.
+
+210.	The method of claim 102 or 141, further comprising a timer.
+
+211.	The method of claim 35, wherein the state is cached.
+
+212.	The method of claim 44, wherein the state is cached.
+
+213.	The method of claim 117, further comprising:
+repeating the determining according to claim 57.
+
+214.	The method of claim 3 or 138, further comprising a timer.
+
+215.	The method of claim 133, wherein the state is cached.
+
+216.	The method of claim 146, wherein the state is cached.
+
+217.	The method of claim 36, wherein the state is cached.
+
+218.	The method of claim 148, wherein the state is cached.

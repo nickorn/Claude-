@@ -1,7 +1,9 @@
-# VBA editor requires CRLF line endings on import
-*.bas text eol=crlf
-*.cls text eol=crlf
-*.frm text eol=crlf
+# VBA editor requires CRLF line endings on import. Files are stored with CRLF
+# and never converted, so every download (clone, ZIP) delivers them intact.
+# tools/build.py checks this.
+*.bas -text diff
+*.cls -text diff
+*.frm -text diff
 *.frx binary
 *.docm binary
 *.dotm binary

@@ -1,0 +1,23 @@
+#flags 2
+Claims
+1.	A method for processing a signal, the method comprising:
+receiving a signal;
+filtering the signal; and
+outputting the filtered signal.
+
+2.	The method of claim 1, wherein the filtering is a low-pass filtering.
+
+3.	The method of claim 2, wherein a cut-off frequency is adjustable.
+
+4.	The method of any one of claims 1 to 3, wherein the signal is digital.
+
+5.	The method of claim 6 or 4, further comprising:
+storing the signal according to claim 3.
+
+6.	The method of claim 5, wherein the storing is volatile.
+
+7.	The method of claims 1-4 and/or 6.
+
+8.	A device configured to carry out the method of claim 1.
+
+9.	The device of claim 8, comprising a processor, wherein the processor is configured as claimed in claim 12.

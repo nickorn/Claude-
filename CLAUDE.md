@@ -13,7 +13,7 @@ Owner/user: Niklas (Patentanwaltskandidat). Later possibly colleagues.
 - `Option Explicit` in every module. One module per feature, prefixed: `modRenumber`, `modCheckAntecedent`, `modFormat`, ...
 - Performance: claim sets up to ~300 claims. Use `Range`/`Find`, read paragraphs into arrays, no per-character loops, `Application.ScreenUpdating = False` with guaranteed restore in error handlers.
 - Never modify the original document for clean/marked-up versions – always create a new document.
-- Settings: JSON in `%APPDATA%\PatentTools\` (`settings.json`, `blacklist.json`, `textblocks\`), created from defaults on first run. Defaults live in `config/`. Parse with an embedded MIT-licensed VBA JSON parser (e.g. VBA-JSON by Tim Hall, vendored into `src/modules/JsonConverter.bas` with its license header).
+- Settings: JSON in `%APPDATA%\PatentTools\` (`settings.json`, `blacklist.json`, `textblocks\`), created from defaults on first run. Defaults live in `config/`. Parsed by our own minimal parser `src/modules/modJson.bas` (no third-party code). Defaults are embedded via the generated `modDefaults.bas` (`tools/build.py`); never edit it by hand.
 - No hard-coded personal paths. Use `Environ("APPDATA")`.
 
 ## Document model (what macros can rely on)
@@ -44,7 +44,10 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 
 ## Build approach
 - `src/` is the source of truth. The `.dotm` container + `customUI/customUI14.xml` + ribbon images are assembled by a script (zip/OOXML, e.g. Python) into `build/`.
-- `vbaProject.bin` cannot be generated reliably outside Office → VBA modules are imported once in the VBA editor (Alt+F11 → Import File), then the .dotm is saved. Provide an import helper macro / instructions in README.
+- `vbaProject.bin` cannot be generated reliably outside Office → VBA modules are imported into the .dotm with the helper `tools/PT_ImportModules.bas` (lives in Normal.dotm), then the .dotm is saved. Steps in README.
+- `python3 tools/build.py` regenerates `modDefaults.bas`, checks sources and builds `build/PatentTools.dotm` (ribbon only).
+- VBA sources must be pure ASCII with CRLF line endings (VBA editor imports in the ANSI code page; `tools/build.py` checks both): German texts use the tokens of `modStrings.Txt` (`{ue}` …) or `ChrW`.
+- Keep Word-independent logic in pure modules (e.g. `modClaimParse`: plain strings in, planned edits out) and the Word object model in thin modules (e.g. `modRenumber`). Pure logic is tested headless with `python3 tools/run_vba_tests.py` (LibreOffice Basic): unit tests in `tests/vba/` plus every `tests/fixtures/*.docx` against its `.expected.txt` (`tools/make_fixtures.py`). Run it before every commit; Word-level behaviour still needs a check in Word by Niklas.
 - Ribbon callbacks: `Public Sub OnAction_xyz(control As IRibbonControl)`; dynamic menus via `getContent`.
 
 ## Roadmap (in order)
@@ -52,12 +55,12 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 2. **MVP-2** Full final claim check → Word comments (author "PatentCheck") + highlight colour per category + "Prüfmarkierungen entfernen" + optional report document.
 3. Formatting fixer.
 4. Clean version / marked-up version + footer status.
-5. Text blocks (dynamic menu from files; placeholders `[DATUM]`, `[D1]`, ...).
+5. Text blocks (dynamic menu from files `<Subfolder>\NN_Label.docx`, prefix = sort order only; placeholders `[DATUM]`, `[D1]`, ...).
 6. Claim tree, claim merge, dependent-claim skeletons.
 7. Method ↔ apparatus, claims → description, reference signs strip/insert.
 
 ## Open points (ask Niklas before deciding)
-- Text-block naming scheme `NN_Label.docx` per subfolder – awaiting confirmation.
+- none currently
 
 ## Working rules for Claude
 - Deliver complete, importable modules – never fragments.

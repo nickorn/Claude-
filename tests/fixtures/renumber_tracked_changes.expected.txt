@@ -1,0 +1,9 @@
+#flags 0
+Claims
+1.	A method comprising a single step.
+
+2.	The method of claim 1, wherein the step is repeated.
+
+3.	The method of claim 2, wherein the step is timed.
+
+4.	The method of claim 3.

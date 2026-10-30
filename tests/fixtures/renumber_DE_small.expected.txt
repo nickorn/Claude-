@@ -1,0 +1,19 @@
+#flags 1
+Patentansprüche
+1.	Verfahren zur Verarbeitung eines Signals, mit:
+Empfangen eines Signals;
+Filtern des Signals; und
+Ausgeben des gefilterten Signals.
+
+2.	Verfahren nach Anspruch 1, wobei das Filtern ein Tiefpassfiltern ist.
+
+3.	Verfahren nach einem der Ansprüche 1 bis 2, wobei das Signal digital ist.
+
+4.	Verfahren nach Anspruch 3 oder 2, ferner mit:
+Speichern des Signals gemäß Patentanspruch 2.
+
+5.	Vorrichtung, eingerichtet zur Durchführung des Verfahrens nach einem der Ansprüche 1 bis 3.
+
+6.	Vorrichtung nach Anspruch 5, mit einem Prozessor gemäß den Ansprüchen 1, 3 und 4 sowie des Anspruchs 5.
+
+7.	Computerprogramm mit Befehlen, die bewirken, dass die Vorrichtung des Anspruchs 6 das Verfahren nach Anspruch 1 ausführt.

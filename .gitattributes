@@ -1,0 +1,8 @@
+# VBA editor requires CRLF line endings on import
+*.bas text eol=crlf
+*.cls text eol=crlf
+*.frm text eol=crlf
+*.frx binary
+*.docm binary
+*.dotm binary
+*.docx binary

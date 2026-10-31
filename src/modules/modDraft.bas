@@ -181,9 +181,11 @@ Fail:
     MsgBox MsgUnexpectedError(errDesc), vbCritical, AppTitle()
 End Sub
 
-' Claim containing the cursor (0 = before the first claim).
+' Claim containing the cursor (0 = before the first claim, or the cursor is
+' not in the main text, e.g. in a footer or comment).
 Public Function ClaimAtSelection(ByVal doc As Document, ByVal starts As Variant) As Long
     Dim p As Long, sel As Long, hit As Long
+    If Selection.StoryType <> wdMainTextStory Then Exit Function
     sel = Selection.Start
     hit = -1
     For p = LBound(starts) To UBound(starts)

@@ -70,7 +70,7 @@ Private Sub TestEmbeddedDefaults()
     Check "default trackChangesMode", JsonLookup(root, "renumber.trackChangesMode") = "tracked"
     Check "default comment author", JsonLookup(root, "check.commentAuthor") = "PatentCheck"
     Check "default font", JsonLookup(root, "format.fontName") = "Arial"
-    Check "default label pattern", JsonLookup(root, "claims.labelPattern") = "^\d+[0-9A-Za-z.]*$"
+    Check "default textblock folder", JsonLookup(root, "textblocks.folder") = "%APPDATA%\PatentTools\textblocks"
     Check "default footer DE", JsonLookup(root, "footer.status.de.clean") = "Reinschrift"
     Set root = JsonParse(DecodeJsonUnicode(DefaultBlacklistJson()))
     Check "blacklist parses", root.Exists("de")

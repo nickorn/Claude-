@@ -57,7 +57,7 @@ wdyellow wdbrightgreen wdturquoise wdpink wdblue wdred wddarkblue wdteal wdgreen
 wdgray50 wdgray25 wdnohighlight wdrevisiondelete wdrevisionmovedfrom wdrevisionsmarkupall wdrevisionsviewfinal
 wdinlinerevisions wdlinespacesingle wdlinespace1pt5 wdlinespacedouble wdlinespacemultiple wdseparatebytabs
 wdheaderfooterprimary wdheaderfooterfirstpage wdheaderfooterevenpages wdcharacter wdalignparagraphleft
-wdaligntabright wdcollapseend wdfindstop wdreplaceall wddonotsavechanges
+wdaligntabright wdmaintextstory wdcollapseend wdfindstop wdreplaceall wddonotsavechanges
 msofiledialogfolderpicker msofiledialogfilepicker
 linestopoints centimeterstopoints
 """.split())
@@ -325,7 +325,8 @@ def proc_signatures(files_lines):
                 pm = PARAM_RE.match(part)
                 if pm:
                     mode = "byval" if (pm.group(2) or "").strip().lower() == "byval" else "byref"
-                    params.append((mode, (pm.group(6) or "variant").lower(), bool(pm.group(5))))
+                    kind = "optional" if pm.group(1) else ("paramarray" if pm.group(3) else "required")
+                    params.append((mode, (pm.group(6) or "variant").lower(), bool(pm.group(5)), kind))
             sigs[m.group(3).lower()] = params
     return sigs
 
@@ -350,23 +351,63 @@ def check_byref_types(path, lines, sigs):
                     types[vm.group(1).lower()] = ((vm.group(3) or "variant").lower(), bool(vm.group(2)))
             continue
         # calls: Name(args) or statement form "Name arg, arg"
-        for cm in re.finditer(r"(?<![\w.])(\w+)\s*\(([^()]*(?:\([^()]*\)[^()]*)*)\)", code):
-            check_call(path, no, cm.group(1), cm.group(2), sigs, types, problems)
+        for cname, cargs in paren_calls(code):
+            check_call(path, no, cname, cargs, sigs, types, problems)
+        pm2 = re.match(r"^(\w+)\s*\((.*)\)\s*$", code)
+        if pm2 and pm2.group(1).lower() in sigs and len(split_args(pm2.group(2))) > 1 \
+                and code.count("(") == code.count(")") and next(paren_calls(code))[1] == pm2.group(2):
+            problems.append(f"{path}:{no}: '{pm2.group(1)}(a, b)' as a statement needs 'Call' or no parentheses - 'Expected: ='")
         sm = re.match(r"^(\w+)\s+(?!=)([^=].*)$", code)
         if sm and sm.group(1).lower() in sigs and not re.match(r"^(If|ElseIf|For|Do|While|Select|Case|With|Set|Dim|ReDim|Call|Exit|End|Next|Loop|GoTo|On|Debug|Option)\b", code, re.I):
             check_call(path, no, sm.group(1), sm.group(2), sigs, types, problems)
     return problems
 
 
+def split_args(text):
+    """Split an argument list at top-level commas (depth-aware)."""
+    args, depth, cur = [], 0, ""
+    for ch in text:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        if ch == "," and depth == 0:
+            args.append(cur.strip())
+            cur = ""
+        else:
+            cur += ch
+    if cur.strip() or args:
+        args.append(cur.strip())
+    return args
+
+
+def paren_calls(code):
+    """(name, argument text) for every identifier directly followed by '(' ... ')'."""
+    for m in re.finditer(r"(?<![\w.])(\w+)\s*\(", code):
+        depth, i = 1, m.end()
+        while i < len(code) and depth:
+            if code[i] == "(":
+                depth += 1
+            elif code[i] == ")":
+                depth -= 1
+            i += 1
+        yield m.group(1), code[m.end():i - 1]
+
+
 def check_call(path, no, name, argtext, sigs, types, problems):
     sig = sigs.get(name.lower())
-    if not sig:
+    if sig is None or name.lower() in types:
         return
-    args = [a.strip() for a in re.split(r",(?![^()]*\))", argtext)] if argtext.strip() else []
+    args = split_args(argtext) if argtext.strip() else []
+    required = sum(1 for p in sig if p[3] == "required")
+    has_paramarray = any(p[3] == "paramarray" for p in sig)
+    if len(args) < required or (len(args) > len(sig) and not has_paramarray):
+        problems.append(f"{path}:{no}: {name} called with {len(args)} argument(s), expects "
+                        f"{required}{'..' + str(len(sig)) if len(sig) != required else ''} - 'Wrong number of arguments'")
     for i, a in enumerate(args):
         if i >= len(sig) or not re.fullmatch(r"\w+", a):
             continue
-        mode, ptype, parr = sig[i]
+        mode, ptype, parr, _ = sig[i]
         var = types.get(a.lower())
         if mode != "byref" or var is None:
             continue

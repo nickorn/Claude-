@@ -101,6 +101,9 @@
                   onAction="OnAction_OpenSettings"
                   screentip="Einstellungen öffnen"
                   supertip="Öffnet settings.json aus %APPDATA%\PatentTools im Editor."/>
+          <button id="btnOpenBlacklist" label="Blacklist bearbeiten" imageMso="PropertySheet"
+                  onAction="OnAction_OpenBlacklist"
+                  supertip="Öffnet blacklist.json (unklare Begriffe, je Sprache) im Editor. Änderungen gelten bei der nächsten Prüfung."/>
           <button id="btnInfo" label="Info" imageMso="Help"
                   onAction="OnAction_Info"
                   screentip="Info / Version"/>

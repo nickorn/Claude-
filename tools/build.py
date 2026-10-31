@@ -168,6 +168,38 @@ def block_balance_problems(path: Path, text: str) -> list[str]:
     return problems
 
 
+# ---------------------------------------------------------------- settings
+
+# keys read directly (not via GetSettingValue) or informational
+SETTINGS_EXTRA = {"version", "description.introPhrases.en", "description.introPhrases.de"}
+
+
+def settings_problems() -> list[str]:
+    """Every key the code reads exists in config/settings.json, and every key
+    there is read by the code (otherwise editing it would silently do nothing)."""
+    import json
+    cfg = json.loads((CONFIG / "settings.json").read_text(encoding="utf-8"))
+
+    def leaves(d, prefix=""):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                yield from leaves(v, prefix + k + ".")
+            else:
+                yield prefix + k
+
+    defined = set(leaves(cfg))
+    used = set()
+    code = "\n".join(p.read_text(encoding="ascii") for p in (SRC / "modules").glob("*.bas"))
+    used |= set(re.findall(r'GetSettingValue\("([^"]+)"\s*,', code))
+    check_keys = re.search(r'CHECK_KEYS As String = "([^"]+)"', code).group(1).split("|")
+    used |= {f"check.enabled.{k}" for k in check_keys} | {f"check.highlightColors.{k}" for k in check_keys}
+    used |= {f"footer.status.{lang}.{k}" for lang in ("de", "en") for k in ("markedUp", "clean", "inventorApproved")}
+    used |= SETTINGS_EXTRA
+    problems = [f"config/settings.json: code reads '{k}' but it is not defined" for k in sorted(used - defined)]
+    problems += [f"config/settings.json: '{k}' is never read by the code" for k in sorted(defined - used)]
+    return problems
+
+
 # ---------------------------------------------------------------- package
 
 # customUI 2009/07: attributes this project may use per element. Word drops the
@@ -260,7 +292,7 @@ def main() -> int:
     args = ap.parse_args()
 
     print("generated", generate_defaults().relative_to(ROOT))
-    problems = check_sources()
+    problems = check_sources() + settings_problems()
     import subprocess
     lint = subprocess.run([sys.executable, str(ROOT / "tools" / "vba_lint.py")], capture_output=True, text=True)
     print(lint.stdout.strip().splitlines()[-1])

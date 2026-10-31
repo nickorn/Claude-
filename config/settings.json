@@ -1,7 +1,6 @@
 {
-  "version": "0.8.0",
+  "version": "0.8.1",
   "language": {
-    "ui": "de",
     "claimLanguageDetection": "auto"
   },
   "format": {
@@ -16,14 +15,7 @@
     "layoutTrackChanges": "silent",
     "textTrackChanges": "tracked"
   },
-  "claims": {
-    "labelPattern": "^\\d+[0-9A-Za-z.]*$",
-    "separator": "TAB",
-    "emptyParagraphsBetweenClaims": 1
-  },
   "punctuation": {
-    "featureEnd": ";",
-    "lastFeatureEnd": ".",
     "enforceAndBeforeLastFeature": true,
     "flagWhereinAfterFullStop": true
   },
@@ -69,18 +61,33 @@
   },
   "footer": {
     "status": {
-      "de": { "markedUp": "Markierte Fassung", "clean": "Reinschrift", "inventorApproved": "Vom Erfinder freigegeben" },
-      "en": { "markedUp": "Marked-up version", "clean": "Clean version", "inventorApproved": "Approved by inventor" }
-    },
-    "touchRightFooter": false
+      "de": {
+        "markedUp": "Markierte Fassung",
+        "clean": "Reinschrift",
+        "inventorApproved": "Vom Erfinder freigegeben"
+      },
+      "en": {
+        "markedUp": "Marked-up version",
+        "clean": "Clean version",
+        "inventorApproved": "Approved by inventor"
+      }
+    }
   },
   "versions": {
     "markedUpKeepComments": false
   },
   "description": {
     "introPhrases": {
-      "en": ["According to a first embodiment, ", "According to an embodiment, ", "In examples, "],
-      "de": ["Gemäß einer ersten Ausführungsform ", "Gemäß einer Ausführungsform ", "In Beispielen "]
+      "en": [
+        "According to a first embodiment, ",
+        "According to an embodiment, ",
+        "In examples, "
+      ],
+      "de": [
+        "Gemäß einer ersten Ausführungsform ",
+        "Gemäß einer Ausführungsform ",
+        "In Beispielen "
+      ]
     }
   },
   "textblocks": {

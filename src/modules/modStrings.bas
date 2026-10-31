@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.8.0"
+Public Const APP_VERSION As String = "0.8.1"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"

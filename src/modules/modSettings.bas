@@ -59,6 +59,15 @@ Fail:
     MsgBox MsgConfigFolderError(ConfigFolder(), Err.Description), vbExclamation, AppTitle()
 End Sub
 
+Public Sub OpenBlacklistFile()
+    On Error GoTo Fail
+    EnsureUserConfig
+    Shell "notepad.exe """ & BlacklistPath() & """", vbNormalFocus
+    Exit Sub
+Fail:
+    MsgBox MsgConfigFolderError(ConfigFolder(), Err.Description), vbExclamation, AppTitle()
+End Sub
+
 Private Sub LoadSettings()
     Dim errText As String
     If mDefaults Is Nothing Then Set mDefaults = JsonParse(DecodeJsonUnicode(DefaultSettingsJson()))

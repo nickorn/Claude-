@@ -108,6 +108,10 @@ Public Sub OnAction_OpenSettings(control As IRibbonControl)
     OpenSettingsFile
 End Sub
 
+Public Sub OnAction_OpenBlacklist(control As IRibbonControl)
+    OpenBlacklistFile
+End Sub
+
 Public Sub OnAction_Info(control As IRibbonControl)
     MsgBox MsgInfo(ConfigFolder()), vbInformation, AppTitle()
 End Sub

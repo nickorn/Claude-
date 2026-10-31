@@ -60,7 +60,7 @@ Private Function ListTextBlocks(ByVal base As String) As String
 End Function
 
 Public Sub InsertTextBlock(ByVal path As String)
-    Dim doc As Document, rng As Range, ins As Range, startPos As Long, oldEnd As Long, removed As Long
+    Dim doc As Document, rng As Range, ins As Range, startPos As Long, oldLen As Long, removed As Long
     Dim names As Collection, nm As Variant, value As String, unfilled As New Collection, errDesc As String
 
     If Documents.Count = 0 Then
@@ -77,12 +77,14 @@ Public Sub InsertTextBlock(ByVal path As String)
     Application.UndoRecord.StartCustomRecord UndoTitleTextBlock()
 
     ' insert at the selection; the inserted range is derived from the length change
+    ' of the story the cursor is in (main text, footer, text box, ...)
     Set rng = Selection.Range
+    Set ins = rng.Duplicate
     startPos = rng.Start
     removed = rng.End - rng.Start
-    oldEnd = doc.Content.End
+    oldLen = rng.StoryLength
     rng.InsertFile path
-    Set ins = doc.Range(startPos, startPos + (doc.Content.End - oldEnd) + removed)
+    ins.SetRange startPos, startPos + (ins.StoryLength - oldLen) + removed
 
     If CBool(GetSettingValue("textblocks.askForPlaceholders", True)) Then
         Set names = FindPlaceholders(ins.Text)

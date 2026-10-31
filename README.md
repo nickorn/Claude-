@@ -7,7 +7,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 - Referenzmaterial: `docs/reference/` (EP 20 187 485.6)
 - Versionen: `CHANGELOG.md`
 
-## Stand (Version 0.8.0)
+## Stand (Version 0.8.1)
 
 | Funktion | Status |
 |---|---|
@@ -70,6 +70,38 @@ Word schließen, die neue `PatentTools.dotm` (oder die alte aus dem Arbeitsordne
 | `IRibbonControl` oder `msoFileDialogFolderPicker` unbekannt | VBA-Editor → *Extras → Verweise* → „Microsoft Office 16.0 Object Library“ anhaken. |
 | `PT_ImportModules` meldet einen Fehler | Vorbereitung 1 fehlt, oder die `PatentTools.dotm` ist nicht über *Datei → Öffnen* geöffnet. |
 | Eine Funktion meldet „Unerwarteter Fehler“ | Mit Strg+Z rückgängig machen und die Meldung samt Testdokument an Claude schicken. |
+
+## Einstellungen (`%APPDATA%\PatentTools\settings.json`)
+
+Öffnen mit *Einstellungen → Einstellungen öffnen* (Editor). Änderungen gelten beim nächsten Klick auf eine Funktion – kein Neustart nötig. Fehlt ein Wert oder ist die Datei fehlerhaft, gilt der Standardwert (mit Hinweis).
+
+| Schlüssel | Bedeutung (Standard) |
+|---|---|
+| `language.claimLanguageDetection` | Anspruchssprache: `"auto"`, `"de"` oder `"en"` |
+| `format.fontName`, `fontSize`, `lineSpacing`, `spaceBefore`, `spaceAfter` | Soll-Format für Prüfung und *Formatierung anwenden* (Arial, 11, 1,5, 0, 0) |
+| `format.subFeatureIndentCm` | Einzugstiefe der Merkmale (1,25 cm) |
+| `format.applyToWholeDocument` | Format für das ganze Dokument statt nur ab Anspruch 1 (`true`) |
+| `format.fixEmptyParagraphs` | *Formatierung anwenden* setzt genau einen Leerabsatz zwischen Ansprüchen (`true`) |
+| `format.layoutTrackChanges` / `textTrackChanges` | `"silent"` = ohne Änderungsverfolgung, `"tracked"` = wie im Dokument eingestellt (`"silent"` / `"tracked"`) |
+| `punctuation.enforceAndBeforeLastFeature` | „; and“/„; und“ vor dem letzten Merkmal verlangen (`true`) |
+| `punctuation.flagWhereinAfterFullStop` | Text nach dem Schlusspunkt melden (`true`) |
+| `referenceSigns.style` | `"parentheses"` = „(150)“; `"plain"` schaltet die Bezugszeichen-Prüfung ab |
+| `referenceSigns.multipleSeparator` | Trennzeichen bei mehreren Bezugszeichen (`", "`) |
+| `referenceSigns.normaliseSemicolon` | „;“ zwischen Bezugszeichen melden (`true`) |
+| `renumber.trackChangesMode` | Neu nummerieren/Zusammenführen: `"tracked"` oder `"silent"` (`"tracked"`) |
+| `check.commentAuthor` | Autorname der Prüfkommentare (`"PatentCheck"`) |
+| `check.createReport` | nach der Vollprüfung zusätzlich den Prüfbericht öffnen (`false`) |
+| `check.flagEveryMultipleDependency` | jeden mehrfach abhängigen Anspruch melden, nicht nur mehrfach auf mehrfach (`false`) |
+| `check.maxFormattingFindings` | höchstens so viele Formatbefunde einzeln kommentieren (20) |
+| `check.enabled.<prüfung>` | einzelne Prüfungen der Vollprüfung ein/aus |
+| `check.highlightColors.<prüfung>` | Markierungsfarbe je Prüfung (`wdYellow`, `wdRed`, `wdBrightGreen`, …, `none`) |
+| `footer.status.de/en.*` | Texte für Fußzeile links |
+| `versions.markedUpKeepComments` | Kommentare in der markierten Fassung behalten (`false`) |
+| `description.introPhrases.de/en` | Auswahl der Einleitungen für *Ansprüche → Beschreibung* |
+| `textblocks.folder` | Ordner der Textbausteine (später z. B. ein Netzlaufwerk) |
+| `textblocks.askForPlaceholders` / `highlightUnfilledPlaceholders` | Platzhalter abfragen / unausgefüllte gelb markieren (`true`) |
+
+Die Liste unklarer Begriffe steht in `blacklist.json` (`"de"` und `"en"`, ganze Wörter, Groß-/Kleinschreibung egal): *Einstellungen → Blacklist bearbeiten*.
 
 ## Testen
 

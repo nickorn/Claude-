@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.1] – 2026-10-31
+### Added
+- Ribbon "Einstellungen → Blacklist bearbeiten" (was in the ribbon spec, missing so far).
+- README: reference of all settings.
+- Build checks: every settings key read by the code exists in `config/settings.json` and vice versa; lint for wrong argument counts and `Foo(a, b)` statements.
+
+### Fixed
+- Commands using the claim at the cursor ignore a cursor outside the main text (footer, comment) instead of picking a wrong claim.
+- Text blocks inserted outside the main text (e.g. footer, text box) get the correct range for placeholders.
+
+### Removed
+- Settings that had no effect: `claims.*`, `language.ui`, `footer.touchRightFooter`, `punctuation.featureEnd`, `punctuation.lastFeatureEnd` (fixed rules of the document model).
+
 ## [0.8.0] – 2026-10-31
 ### Added
 - Roadmap 7, group "Entwurf": "Verfahren ↔ Vorrichtung" (counterpart of the independent claim at the cursor as new last claim; EN gerund ↔ verb, "comprising" ↔ "configured to"; DE "mit:" ↔ "die eingerichtet ist zum:", "Einrichtung zum X" → "X"), "Ansprüche → Beschreibung" (new document, one paragraph per claim, intro phrase chosen from `description.introPhrases`; EN "... is provided", DE "wird ... bereitgestellt" / "ist vorgesehen, dass ..."), "Bezugszeichen entfernen", "Bezugszeichen einfügen" (first mention per claim; map from this document or another one, e.g. the EP version).

@@ -38,6 +38,7 @@ MODULES = [
     ROOT / "src/modules/modFooterPlan.bas",
     ROOT / "src/modules/modTextBlocksPlan.bas",
     ROOT / "src/modules/modDraftPlan.bas",
+    ROOT / "src/modules/modConvertPlan.bas",
     ROOT / "tests/vba/modTestRenumber.bas",
     ROOT / "tests/vba/modTestJson.bas",
     ROOT / "tests/vba/modTestCheck.bas",
@@ -45,8 +46,9 @@ MODULES = [
     ROOT / "tests/vba/modTestVersions.bas",
     ROOT / "tests/vba/modTestTextBlocks.bas",
     ROOT / "tests/vba/modTestDraft.bas",
+    ROOT / "tests/vba/modTestConvert.bas",
 ]
-TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFormatTests", "RunVersionTests", "RunTextBlockTests", "RunDraftTests", "RunFixtureTests", "RunCheckFixtureTests"]
+TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFormatTests", "RunVersionTests", "RunTextBlockTests", "RunDraftTests", "RunConvertTests", "RunFixtureTests", "RunCheckFixtureTests"]
 FIXTURES = ROOT / "tests" / "fixtures"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 

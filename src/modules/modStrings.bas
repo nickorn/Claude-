@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.7.0"
+Public Const APP_VERSION As String = "0.8.0"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"
@@ -493,4 +493,57 @@ Public Function MsgMergeDone(ByVal dLabel As String, ByVal pLabel As String, ByV
         MsgMergeDone = MsgMergeDone & vbCr & Txt("Artikel (ein/eine {-}> der/die/das) bitte selbst anpassen.")
     End If
     MsgMergeDone = MsgMergeDone & vbCr & Txt("Bitte danach {q<}Zeichensetzung{q>} und {q<}Vollpr{ue}fung{q>} ausf{ue}hren.")
+End Function
+
+' ---------------------------------------------------------------- conversions (roadmap 7)
+
+' kind: 1 = method <-> apparatus, 2 = strip signs, 3 = insert signs
+Public Function UndoTitleConvert(ByVal kind As Long) As String
+    Select Case kind
+        Case 1: UndoTitleConvert = AppTitle() & Txt(": Verfahren <-> Vorrichtung")
+        Case 2: UndoTitleConvert = AppTitle() & Txt(": Bezugszeichen entfernen")
+        Case Else: UndoTitleConvert = AppTitle() & Txt(": Bezugszeichen einf{ue}gen")
+    End Select
+End Function
+
+Public Function MsgConvertDependent() As String
+    MsgConvertDependent = Txt("Bitte den Cursor in einen unabh{ae}ngigen Anspruch setzen.")
+End Function
+
+Public Function MsgConvertCategory(ByVal catName As String) As String
+    MsgConvertCategory = Txt("Nur Verfahrens- und Vorrichtungs-/Systemanspr{ue}che k{oe}nnen umgewandelt werden (erkannt: ") & _
+        catName & ")."
+End Function
+
+Public Function MsgConvertDone(ByVal label As String) As String
+    MsgConvertDone = Txt("Gegenst{ue}ck als Anspruch ") & label & Txt(" am Ende eingef{ue}gt.") & vbCr & vbCr & _
+        Txt("Das ist ein Entwurf: Formulierungen (Verbformen, Komponenten) bitte pr{ue}fen und anpassen.")
+End Function
+
+Public Function MsgChooseIntro() As String
+    MsgChooseIntro = Txt("Einleitungsformel f{ue}r die Beschreibungsabs{ae}tze w{ae}hlen (Nummer oder eigener Text):")
+End Function
+
+Public Function MsgDescriptionDone(ByVal count As Long) As String
+    MsgDescriptionDone = count & Txt(" Beschreibungsabs{ae}tze in einem neuen Dokument erzeugt. ") & _
+        Txt("Das ist ein Entwurf {-} bitte Formulierungen pr{ue}fen. Das Original ist unver{ae}ndert.")
+End Function
+
+Public Function MsgSignsDone(ByVal insertMode As Boolean, ByVal applied As Long, ByVal failed As Long) As String
+    If insertMode Then
+        MsgSignsDone = applied & Txt(" Bezugszeichen eingef{ue}gt.")
+    Else
+        MsgSignsDone = applied & Txt(" Bezugszeichen-Gruppe(n) entfernt.")
+    End If
+    If failed > 0 Then MsgSignsDone = MsgSignsDone & vbCr & failed & _
+        Txt(" Stelle(n) konnten wegen Feldern oder {Ae}nderungsmarkierungen nicht ge{ae}ndert werden.")
+End Function
+
+Public Function MsgSignsAskSource() As String
+    MsgSignsAskSource = Txt("Dieses Dokument enth{ae}lt keine Bezugszeichen. Bezugszeichen aus einem anderen Dokument ") & _
+        Txt("(z. B. der EP-Fassung) {ue}bernehmen?")
+End Function
+
+Public Function MsgSignsNoneFound() As String
+    MsgSignsNoneFound = Txt("Keine Bezugszeichen gefunden.")
 End Function

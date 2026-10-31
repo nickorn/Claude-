@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.0] – 2026-10-31
+### Added
+- Roadmap 7, group "Entwurf": "Verfahren ↔ Vorrichtung" (counterpart of the independent claim at the cursor as new last claim; EN gerund ↔ verb, "comprising" ↔ "configured to"; DE "mit:" ↔ "die eingerichtet ist zum:", "Einrichtung zum X" → "X"), "Ansprüche → Beschreibung" (new document, one paragraph per claim, intro phrase chosen from `description.introPhrases`; EN "... is provided", DE "wird ... bereitgestellt" / "ist vorgesehen, dass ..."), "Bezugszeichen entfernen", "Bezugszeichen einfügen" (first mention per claim; map from this document or another one, e.g. the EP version).
+- All roadmap steps 1–7 implemented.
+
 ## [0.7.0] – 2026-10-31
 ### Added
 - Roadmap 6 in group "Ansprüche": "Anspruchsbaum" (dependency tree as new document; each claim under its first parent, further parents and forward references noted), "Abhängigen Anspruch anlegen" (skeleton "The method according to claim X, wherein" / "Verfahren nach Anspruch X, wobei" with supplementary label after the claim at the cursor), "Ansprüche zusammenführen" (dependent claim at the cursor into its parent: wherein-clauses appended, "further comprising" features added with "; and" moved, EN "a/an" → "the" for introduced terms, references redirected, renumbering).

@@ -74,6 +74,20 @@
             <button id="btnStatusRemove" label="Status entfernen" tag="" onAction="OnAction_FooterStatus"/>
           </menu>
         </group>
+        <group id="grpDraft" label="Entwurf">
+          <button id="btnConvertCategory" label="Verfahren ↔ Vorrichtung" size="large" imageMso="ReplaceDialog"
+                  onAction="OnAction_ConvertCategory"
+                  supertip="Erzeugt aus dem unabhängigen Anspruch am Cursor den Gegenanspruch der anderen Kategorie (Entwurf) und fügt ihn als letzten Anspruch ein."/>
+          <button id="btnClaimsToDescription" label="Ansprüche → Beschreibung" imageMso="FileNew"
+                  onAction="OnAction_ClaimsToDescription"
+                  supertip="Erzeugt in einem neuen Dokument je Anspruch einen Beschreibungsabsatz mit wählbarer Einleitung (z. B. „According to an embodiment, …“)."/>
+          <button id="btnStripSigns" label="Bezugszeichen entfernen" imageMso="Cut"
+                  onAction="OnAction_StripSigns"
+                  supertip="Entfernt alle Bezugszeichen-Gruppen wie „(150, 450)“ aus den Ansprüchen (z. B. für US)."/>
+          <button id="btnInsertSigns" label="Bezugszeichen einfügen" imageMso="Paste"
+                  onAction="OnAction_InsertSigns"
+                  supertip="Ergänzt fehlende Bezugszeichen bei der ersten Nennung eines Begriffs je Anspruch – aus diesem Dokument oder aus einem anderen (z. B. der EP-Fassung)."/>
+        </group>
         <group id="grpTextBlocks" label="Textbausteine">
           <dynamicMenu id="dmTextBlocks" label="Textbausteine" size="large" imageMso="Paste"
                        getContent="GetContent_TextBlocks" invalidateContentOnDrop="true"

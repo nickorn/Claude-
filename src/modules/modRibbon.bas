@@ -72,6 +72,22 @@ Public Sub OnAction_FooterStatus(control As IRibbonControl)
     SetFooterStatus control.Tag
 End Sub
 
+Public Sub OnAction_ConvertCategory(control As IRibbonControl)
+    ConvertMethodApparatus
+End Sub
+
+Public Sub OnAction_ClaimsToDescription(control As IRibbonControl)
+    ClaimsToDescription
+End Sub
+
+Public Sub OnAction_StripSigns(control As IRibbonControl)
+    StripReferenceSigns
+End Sub
+
+Public Sub OnAction_InsertSigns(control As IRibbonControl)
+    InsertReferenceSigns
+End Sub
+
 Public Sub GetContent_TextBlocks(control As IRibbonControl, ByRef returnedVal)
     returnedVal = TextBlocksMenuContent()
 End Sub

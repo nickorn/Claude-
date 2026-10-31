@@ -57,7 +57,7 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 4. ✅ Clean version / marked-up version + footer status.
 5. ✅ Text blocks (dynamic menu from files `<Subfolder>\NN_Label.docx`, prefix = sort order only; placeholders `[DATUM]`, `[D1]`, ...).
 6. ✅ Claim tree, claim merge, dependent-claim skeletons.
-7. Method ↔ apparatus, claims → description, reference signs strip/insert.
+7. ✅ Method ↔ apparatus, claims → description, reference signs strip/insert.
 
 ## Open points (ask Niklas before deciding)
 - none currently

@@ -182,7 +182,7 @@ Fail:
 End Sub
 
 ' Claim containing the cursor (0 = before the first claim).
-Private Function ClaimAtSelection(ByVal doc As Document, ByVal starts As Variant) As Long
+Public Function ClaimAtSelection(ByVal doc As Document, ByVal starts As Variant) As Long
     Dim p As Long, sel As Long, hit As Long
     sel = Selection.Start
     hit = -1

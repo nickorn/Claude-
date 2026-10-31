@@ -8,7 +8,7 @@ Option Explicit
 Public Function DefaultSettingsJson() As String
     Dim s As String
     s = s & "{" & vbLf
-    s = s & "  ""version"": ""0.7.0""," & vbLf
+    s = s & "  ""version"": ""0.8.0""," & vbLf
     s = s & "  ""language"": {" & vbLf
     s = s & "    ""ui"": ""de""," & vbLf
     s = s & "    ""claimLanguageDetection"": ""auto""" & vbLf

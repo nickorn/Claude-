@@ -1,0 +1,12 @@
+# expected findings per check (Vollpruefung); formatting is only checked in Word
+numbering 0
+punctuation 1
+spacing 0
+formatting 0
+backReferences 1
+independentClaims 0
+multipleDependencies 0
+antecedentBasis 3
+referenceSigns 1
+blacklist 1
+categories 1

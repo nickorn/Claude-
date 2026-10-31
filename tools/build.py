@@ -109,7 +109,10 @@ def check_sources() -> list[str]:
             problems.append(f"{path.relative_to(ROOT)}: non-ASCII characters (use modStrings tokens / ChrW)")
             continue
         if re.search(r"(?<!\r)\n", text):
-            problems.append(f"{path.relative_to(ROOT)}: line endings must be CRLF")
+            # normalise instead of failing: editors on Linux/macOS write LF
+            text = text.replace("\r\n", "\n").replace("\n", "\r\n")
+            path.write_bytes(text.encode("ascii"))
+            print("normalised line endings to CRLF:", path.relative_to(ROOT))
         m = re.search(r'^Attribute VB_Name = "([^"]+)"', text, re.M)
         if not m or m.group(1) != path.stem:
             problems.append(f"{path.relative_to(ROOT)}: VB_Name must equal the file name")

@@ -16,6 +16,22 @@ Public Sub OnAction_Renumber(control As IRibbonControl)
     RenumberClaims
 End Sub
 
+Public Sub OnAction_FullCheck(control As IRibbonControl)
+    RunFullCheck
+End Sub
+
+Public Sub OnAction_CheckSingle(control As IRibbonControl)
+    RunSingleCheck control.Tag
+End Sub
+
+Public Sub OnAction_RemoveMarks(control As IRibbonControl)
+    RemoveCheckMarks
+End Sub
+
+Public Sub OnAction_Report(control As IRibbonControl)
+    RunCheckReport
+End Sub
+
 Public Sub OnAction_OpenSettings(control As IRibbonControl)
     OpenSettingsFile
 End Sub

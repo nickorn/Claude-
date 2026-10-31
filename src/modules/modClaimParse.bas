@@ -33,26 +33,26 @@ Private Const KW_DE_SINGULAR As String = "anspruch"
 
 ' ---------------------------------------------------------------- characters
 
-Private Function IsDigitChar(ByVal c As String) As Boolean
+Public Function IsDigitChar(ByVal c As String) As Boolean
     If Len(c) <> 1 Then Exit Function
     Dim a As Long
     a = AscW(c)
     IsDigitChar = (a >= 48 And a <= 57)
 End Function
 
-Private Function IsLabelChar(ByVal c As String) As Boolean
+Public Function IsLabelChar(ByVal c As String) As Boolean
     If Len(c) <> 1 Then Exit Function
     Dim a As Long
     a = AscW(c)
     IsLabelChar = (a >= 48 And a <= 57) Or (a >= 65 And a <= 90) Or (a >= 97 And a <= 122) Or a = 46
 End Function
 
-Private Function IsLetterChar(ByVal c As String) As Boolean
+Public Function IsLetterChar(ByVal c As String) As Boolean
     If Len(c) <> 1 Then Exit Function
     IsLetterChar = (LCase$(c) <> UCase$(c)) Or AscW(c) = 223
 End Function
 
-Private Function IsSpaceChar(ByVal c As String) As Boolean
+Public Function IsSpaceChar(ByVal c As String) As Boolean
     If Len(c) <> 1 Then Exit Function
     Select Case AscW(c)
         Case 32, 9, 160, 8194, 8195, 8201, 8239
@@ -60,7 +60,7 @@ Private Function IsSpaceChar(ByVal c As String) As Boolean
     End Select
 End Function
 
-Private Function IsAllDigits(ByVal s As String) As Boolean
+Public Function IsAllDigits(ByVal s As String) As Boolean
     Dim i As Long
     If Len(s) = 0 Then Exit Function
     For i = 1 To Len(s)
@@ -69,7 +69,7 @@ Private Function IsAllDigits(ByVal s As String) As Boolean
     IsAllDigits = True
 End Function
 
-Private Function SkipSpaces(ByVal s As String, ByVal pos As Long) As Long
+Public Function SkipSpaces(ByVal s As String, ByVal pos As Long) As Long
     Do While pos <= Len(s)
         If Not IsSpaceChar(Mid$(s, pos, 1)) Then Exit Do
         pos = pos + 1
@@ -100,7 +100,7 @@ Public Function ParseClaimLabel(ByVal paraText As String, ByRef label As String,
 End Function
 
 ' Collection keys are case-insensitive; labels are not (1a <> 1A).
-Private Function LabelKey(ByVal label As String) As String
+Public Function LabelKey(ByVal label As String) As String
     Dim i As Long, c As String, r As String
     For i = 1 To Len(label)
         c = Mid$(label, i, 1)

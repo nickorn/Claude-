@@ -7,13 +7,21 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 - Referenzmaterial: `docs/reference/` (EP 20 187 485.6)
 - Versionen: `CHANGELOG.md`
 
-## Stand (Version 0.2.0)
+## Stand (Version 0.3.0)
 
 | Funktion | Status |
 |---|---|
 | **Neu nummerieren** (MVP-1) | fertig, in Word noch zu testen |
+| **Vollprüfung, Einzelprüfung, Prüfmarkierungen entfernen, Prüfbericht** (MVP-2) | fertig, in Word noch zu testen |
 | Einstellungen öffnen, Info | fertig |
-| Vollprüfung (MVP-2) und alles Weitere | geplant (siehe Roadmap in `CLAUDE.md`) |
+| Formatierung, Reinschrift/markierte Fassung, Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
+
+### Prüfung – was passiert
+- **Vollprüfung** führt alle in `settings.json` (`check.enabled`) aktivierten Prüfungen aus; **Einzelprüfung** nur eine.
+- Jeder Befund wird als Kommentar von „PatentCheck“ mit vorangestelltem Prüfungsnamen (z. B. „[Bezugsbasis] …“) eingefügt und farbig markiert (Farbe je Prüfung: `check.highlightColors`). Die Änderungsverfolgung wird dabei kurz ausgeschaltet, damit keine Formatänderungen aufgezeichnet werden.
+- Vor jeder Prüfung werden die alten Prüfmarkierungen entfernt. **Prüfmarkierungen entfernen** löscht nur Kommentare/Markierungen des Werkzeugs – eigene Kommentare bleiben.
+- **Prüfbericht** listet alle Befunde als Tabelle in einem neuen Dokument; das Original bleibt unverändert.
+- Ansatz „flag it, you decide“: Lieber ein Hinweis zu viel als einer zu wenig, besonders bei Bezugsbasis und unklaren Begriffen.
 
 ### Neu nummerieren – was passiert
 - Alle Ansprüche (Absatz beginnt mit `Nummer.` + Tab) werden **in Dokumentreihenfolge** fortlaufend 1, 2, 3 … nummeriert – auch Zusatznummern wie `1a`, `1.1`, `1a.1`, `1a1` (jede Nummer ist ein eigenes Kennzeichen, `1a1` ≠ `1a.1`).
@@ -46,7 +54,8 @@ Falls beim Kompilieren `IRibbonControl` oder `msoFileDialogFolderPicker` unbekan
 ## Testen
 
 **In Word** (empfohlen nach jedem Update):
-- `tests/fixtures/*.docx` öffnen → *Patent-Tools → Neu nummerieren*. Das erwartete Ergebnis steht in `<Name>.expected.txt` (erste Zeile: Anzahl erwarteter Kommentare).
+- `tests/fixtures/renumber_*.docx` öffnen → *Patent-Tools → Neu nummerieren*. Das erwartete Ergebnis steht in `<Name>.expected.txt` (erste Zeile: Anzahl erwarteter Kommentare).
+- `tests/fixtures/check_*.docx` und `EP20187485_*.docx` öffnen → *Vollprüfung*. Die erwartete Anzahl Befunde je Prüfung steht in `<Name>.check.txt` (die Meldung am Ende zeigt die Zahlen je Prüfung).
 - `renumber_EN_large.docx` (218 Ansprüche) dient auch als Geschwindigkeitstest.
 - Optional die Unit-Tests: `tests/vba/modTestRenumber.bas` und `modTestJson.bas` zusätzlich importieren, Alt+F8 → `PT_RunRenumberTests` / `PT_RunJsonTests`.
 

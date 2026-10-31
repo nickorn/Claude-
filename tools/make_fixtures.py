@@ -267,6 +267,126 @@ def fixture_large(n_main=160, seed=20187485):
     return items
 
 
+# ---------------------------------------------------------------- check fixtures (MVP-2)
+#
+# Paragraph lists: (text, indent_level, formatting_override). "|" = TAB.
+# <name>.check.txt holds the expected number of findings per check; the text
+# checks are verified headless by tools/run_vba_tests.py, "formatting" only in Word.
+
+def check_en_seeded():
+    return [
+        ("Claims", 0, None),
+        ("1.|A device for measuring a signal, comprising:", 0, None),
+        ("a sensor (10) configured to detect the signal;", 1, None),
+        ("a processor (20) connected to the sensor (10); and", 1, None),
+        ("a display (30) for showing the result.", 1, None),           # antecedent: the result
+        ("", 0, None),
+        ("2.|The device of claim 1, wherein the sensor (10) is optical.", 0, {"font": "Times New Roman"}),
+        ("", 0, None),
+        # double space, space before full stop, other sign for the processor
+        ("3.|The device of claim 2  wherein the processor (21) is a microcontroller .", 0, {"space_after": 6}),
+        ("", 0, None),
+        ("", 0, None),                                                  # two empty paragraphs
+        # forward reference, blacklist, sign missing, antecedent: the display (claim 6 has none)
+        ("4.|The device of claim 6, wherein the display is substantially flat.", 0, None),
+        ("", 0, None),
+        # supplementary number, category mismatch, antecedent: the method, the light
+        ("4a.|The method of claim 1, wherein the light is red.", 0, None),
+        ("", 0, None),
+        # second independent device claim, no full stop, sign missing for the sensor
+        ("6.|A device for measuring a signal comprising a sensor; wherein", 0, None),
+    ], {"numbering": 1, "punctuation": 1, "spacing": 3, "formatting": 2, "backReferences": 1,
+        "independentClaims": 0, "multipleDependencies": 0, "antecedentBasis": 4, "referenceSigns": 3,
+        "blacklist": 1, "categories": 2}
+
+
+def check_de_seeded():
+    return [
+        ("Patentansprüche", 0, None),
+        ("1.|Vorrichtung zum Messen eines Signals, mit:", 0, None),
+        ("einem Sensor (10) zum Erfassen des Signals;", 1, None),
+        ("einem Prozessor (20), der mit dem Sensor (10) verbunden ist;", 1, None),  # "; und" missing
+        ("einer Anzeige (30) zum Anzeigen des Ergebnisses.", 1, None),             # antecedent
+        ("", 0, None),
+        ("2.|Vorrichtung nach Anspruch 1, wobei der Sensor (10) optisch ist.", 0, None),
+        ("", 0, None),
+        # self reference (so no parent: "die Anzeige" has no basis), blacklist, sign missing
+        ("3.|Vorrichtung nach Anspruch 3, wobei die Anzeige im Wesentlichen flach ist.", 0, None),
+        ("", 0, None),
+        # category mismatch, antecedent: das Licht
+        ("4.|Verfahren nach Anspruch 1, wobei das Licht rot ist.", 0, None),
+    ], {"numbering": 0, "punctuation": 1, "spacing": 0, "formatting": 0, "backReferences": 1,
+        "independentClaims": 0, "multipleDependencies": 0, "antecedentBasis": 3, "referenceSigns": 1,
+        "blacklist": 1, "categories": 1}
+
+
+def ep_original():
+    return [
+        ("1.|Method for authorizing a third party, the method comprising:", 0, None), ("", 0, None),
+        ("performing, at a first entity:", 1, None), ("", 0, None),
+        ("obtaining (1110) a biometric feature of the third party;", 2, None), ("", 0, None),
+        ("obtaining (1120) a secret value;", 2, None), ("", 0, None),
+        ("combining (1130) the biometric feature and the secret value so as to obtain a combined secret value;", 2, None), ("", 0, None),
+        ("performing, at an access controller:", 1, None), ("", 0, None),
+        ("receiving (1210) the secret value; and", 2, None), ("", 0, None),
+        ("receiving (1220) the combined secret value;", 2, None), ("", 0, None),
+        ("processing (1230) the combined secret value using the secret value so as to obtain a decoded biometric feature;", 2, None), ("", 0, None),
+        ("the method further comprising:", 1, None), ("", 0, None),
+        ("obtaining (1310) a biometric feature to be verified;", 1, None), ("", 0, None),
+        ("comparing (1320) the decoded biometric feature with the biometric feature to be verified so as to obtain a comparison result; and", 1, None), ("", 0, None),
+        ("authorizing (1330) the third party based on the comparison result.", 1, None), ("", 0, None),
+        ("2.|The method of claim 1, wherein comparing the decoded biometric feature with the biometric feature is executed at the access controller (150; 450) .", 0, None),
+    ], {"numbering": 0, "punctuation": 1, "spacing": 1, "formatting": 0, "backReferences": 0,
+        "independentClaims": 0, "multipleDependencies": 0, "antecedentBasis": 0, "referenceSigns": 2,
+        "blacklist": 0, "categories": 0}
+
+
+def ep_amended():
+    paras, _ = ep_original()
+    paras = paras[:paras.index(("the method further comprising:", 1, None))]
+    paras += [
+        ("the method further comprising at the access controller or a different entity:", 1, None), ("", 0, None),
+        ("obtaining (1310) a biometric feature to be verified;", 1, None), ("", 0, None),
+        ("comparing (1320) the decoded biometric feature with the biometric feature to be verified so as to obtain a comparison result; and", 1, None), ("", 0, None),
+        ("authorizing (1330) the third party based on the comparison result such that the third party is authorized for a permission or access at the access controller on behalf of the first entity.", 1, None), ("", 0, None),
+        ("wherein the biometric feature is transmitted from the access controller (150; 450) to the first entity (100) based on an input signal generated by the third party (250);", 1, None),
+    ]
+    return paras, {"numbering": 0, "punctuation": 3, "spacing": 0, "formatting": 0, "backReferences": 0,
+                   "independentClaims": 0, "multipleDependencies": 0, "antecedentBasis": 0, "referenceSigns": 4,
+                   "blacklist": 0, "categories": 0}
+
+
+def write_check_docx(paras, path):
+    doc = Document()
+    style = doc.styles["Normal"]
+    style.font.name = "Arial"
+    style.font.size = Pt(11)
+    style.element.rPr.rFonts.set(qn("w:eastAsia"), "Arial")
+    pf = style.paragraph_format
+    pf.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
+    pf.space_before = Pt(0)
+    pf.space_after = Pt(0)
+    for text, level, fmt in paras:
+        p = doc.add_paragraph()
+        if level:
+            p.paragraph_format.left_indent = Cm(1.25 * level)
+        run = p.add_run(text.replace("|", "\t"))
+        if fmt and "font" in fmt:
+            run.font.name = fmt["font"]
+            run._r.get_or_add_rPr().get_or_add_rFonts().set(qn("w:hAnsi"), fmt["font"])
+        if fmt and "space_after" in fmt:
+            p.paragraph_format.space_after = Pt(fmt["space_after"])
+    doc.save(path)
+
+
+CHECK_FIXTURES = {
+    "check_EN_seeded": check_en_seeded,
+    "check_DE_seeded": check_de_seeded,
+    "EP20187485_original": ep_original,
+    "EP20187485_amended": ep_amended,
+}
+
+
 FIXTURES = {
     # extra flags not visible in the model: EN small refers to a non-existent "claim 12"
     "renumber_EN_small": (fixture_en_small, 1),
@@ -287,6 +407,13 @@ def main():
             f"#flags {flags}\n" + "\n".join(new) + "\n", encoding="utf-8")
         n_claims = sum(1 for it in items if it[0] == "claim")
         print(f"{name}: {n_claims} claims, {len(old)} paragraphs, {flags} expected comment(s)")
+    for name, make in CHECK_FIXTURES.items():
+        paras, expected = make()
+        write_check_docx(paras, OUT / f"{name}.docx")
+        (OUT / f"{name}.check.txt").write_text(
+            "# expected findings per check (Vollpruefung); formatting is only checked in Word\n"
+            + "".join(f"{k} {v}\n" for k, v in expected.items()), encoding="utf-8")
+        print(f"{name}: {sum(expected.values())} expected finding(s)")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "language": {
     "ui": "de",
     "claimLanguageDetection": "auto"
@@ -34,6 +34,9 @@
   },
   "check": {
     "commentAuthor": "PatentCheck",
+    "createReport": false,
+    "flagEveryMultipleDependency": false,
+    "maxFormattingFindings": 20,
     "enabled": {
       "numbering": true,
       "punctuation": true,

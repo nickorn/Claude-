@@ -3,6 +3,7 @@
   - `renumber_EN_small`, `renumber_DE_small`: supplementary numbers (1a, 1.1, 1a1, 1a.1), ranges, lists, compounds ("Patentanspruch"), an unknown reference.
   - `renumber_tracked_changes`: existing Track Changes (deleted text must be ignored, inserted labels renumbered).
   - `renumber_EN_large`: 218 claims for performance.
-  - planned: seeded-error fixtures for MVP-2 and `EP20187485_*.docx` built from `docs/reference/`.
-- `vba/`: VBA unit tests (`PT_RunRenumberTests`, `PT_RunJsonTests`), runnable in Word or headless via `python3 tools/run_vba_tests.py`.
+  - `check_EN_seeded`, `check_DE_seeded`: seeded errors for every check; `<name>.check.txt` = expected findings per check (formatting only verifiable in Word).
+  - `EP20187485_original`, `EP20187485_amended`: the reference claims with indentation; expected findings follow the table in `docs/reference/EP20187485-claims.md`.
+- `vba/`: VBA unit tests (`PT_RunRenumberTests`, `PT_RunJsonTests`, `PT_RunCheckTests`), runnable in Word or headless via `python3 tools/run_vba_tests.py`.
 - `expected/`: Niklas' corrected versions as Word marked-up documents (Track Changes) = expected results.

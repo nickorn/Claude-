@@ -2,7 +2,8 @@
 """Run the pure-text VBA unit tests headless in LibreOffice Basic.
 
 LibreOffice Basic with `Option VBASupport 1` understands the VBA used in the
-Word-independent modules (modStrings, modClaimParse, modJson, modDefaults).
+Word-independent modules (modStrings, modClaimParse, modJson, modDefaults,
+modClaimModel, modCheck* text checks).
 This lets the parsing logic be tested without Word:
   - tests/vba/*.bas unit tests
   - every tests/fixtures/*.docx: its visible text is run through PlanRenumber
@@ -29,10 +30,15 @@ MODULES = [
     ROOT / "src/modules/modClaimParse.bas",
     ROOT / "src/modules/modJson.bas",
     ROOT / "src/modules/modDefaults.bas",
+    ROOT / "src/modules/modClaimModel.bas",
+    ROOT / "src/modules/modCheckCommon.bas",
+    ROOT / "src/modules/modCheckStructure.bas",
+    ROOT / "src/modules/modCheckTerms.bas",
     ROOT / "tests/vba/modTestRenumber.bas",
     ROOT / "tests/vba/modTestJson.bas",
+    ROOT / "tests/vba/modTestCheck.bas",
 ]
-TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunFixtureTests"]
+TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFixtureTests", "RunCheckFixtureTests"]
 FIXTURES = ROOT / "tests" / "fixtures"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
@@ -117,20 +123,26 @@ def basic_source(path: Path) -> str:
     return "Option VBASupport 1\n" + code
 
 
-def visible_paragraphs(docx: Path) -> list[str]:
-    """Paragraph texts as Word shows them with tracked deletions removed."""
+def visible_paragraphs(docx: Path, with_indents: bool = False):
+    """Paragraph texts as Word shows them with tracked deletions removed
+    (and optionally the left indent in points)."""
     with zipfile.ZipFile(docx) as z:
         root = ET.fromstring(z.read("word/document.xml"))
-    result = []
+    result, indents = [], []
     for p in root.iter(W + "p"):
         parts = []
+        ppr = p.find(W + "pPr")
+        tab_stops = set(ppr.iter()) if ppr is not None else set()  # <w:tabs><w:tab> are tab stops, not text
         for el in p.iter():
             if el.tag == W + "t":
                 parts.append(el.text or "")
-            elif el.tag == W + "tab":
+            elif el.tag == W + "tab" and el not in tab_stops:
                 parts.append("\t")
+        ind = ppr.find(W + "ind") if ppr is not None else None
+        left = ind.get(W + "left") or ind.get(W + "start") if ind is not None else None
+        indents.append(int(left) / 20 if left else 0)
         result.append("".join(parts))
-    return result
+    return (result, indents) if with_indents else result
 
 
 def basic_literal(text: str) -> str:
@@ -159,6 +171,8 @@ def fixture_module() -> str:
              "    Dim ops As Collection, errMsg As String, n As Long, outp As Variant",
              "    Dim flagLog As String, flags As Long, i As Long, ok As Boolean"]
     for docx in sorted(FIXTURES.glob("*.docx")):
+        if not docx.with_suffix(".expected.txt").exists():
+            continue
         exp_lines = docx.with_suffix(".expected.txt").read_text(encoding="utf-8").rstrip("\n").split("\n")
         exp_flags = int(exp_lines[0].split()[1])
         exp_pars = exp_lines[1:]
@@ -201,10 +215,60 @@ def fixture_module() -> str:
         ]
     lines += ['    RunFixtureTests = "Fixtures passed: " & passed & "  Failed: " & failed & vbLf & r',
               "End Function", ""]
+    lines += check_fixture_function()
     return "\n".join(lines)
 
 
-def main() -> int:
+def check_fixture_function() -> list[str]:
+    """RunCheckFixtureTests: runs every text check on each tests/fixtures/*.docx
+    that has a <name>.check.txt and compares the finding counts."""
+    lines = ["Public Function RunCheckFixtureTests() As String",
+             "    Dim r As String, failed As Long, passed As Long, n As Long",
+             "    Dim inp() As String, ind() As Single, f As Collection, ok As Boolean, root As Object, v As Variant"]
+    for docx in sorted(FIXTURES.glob("*.docx")):
+        spec = docx.with_suffix(".check.txt")
+        if not spec.exists():
+            continue
+        expected = {}
+        for row in spec.read_text(encoding="utf-8").splitlines():
+            if row and not row.startswith("#"):
+                key, count = row.split()
+                expected[key] = int(count)
+        texts, indents = visible_paragraphs(docx, with_indents=True)
+        lines.append(f"    ' {docx.name}")
+        lines.append(f"    ReDim inp(0 To {len(texts) - 1})")
+        lines.append(f"    ReDim ind(0 To {len(texts) - 1})")
+        lines += [f"    inp({i}) = {basic_literal(t)}" for i, t in enumerate(texts)]
+        lines += [f"    ind({i}) = {v}" for i, v in enumerate(indents) if v]
+        lines += [
+            "    ok = BuildClaimModel(inp, ind, \"auto\")",
+            "    SetDefaultCheckOptions",
+            "    Set root = JsonParse(DecodeJsonUnicode(DefaultBlacklistJson()))",
+            "    For Each v In root.Item(gLanguage)",
+            "        gBlacklist.Add v",
+            "    Next v",
+        ]
+        for key, count in expected.items():
+            if key == "formatting":
+                continue
+            lines += [
+                "    Set f = New Collection",
+                f'    RunTextCheck "{key}", f',
+                f"    If f.Count <> {count} Then",
+                "        ok = False",
+                f'        r = r & "FAIL {docx.stem} {key}: " & f.Count & " expected {count}" & vbLf',
+                "        For Each v In f",
+                '            r = r & "    para " & v(F_PARA) & " pos " & v(F_START) & ": " & v(F_MSG) & vbLf',
+                "        Next v",
+                "    End If",
+            ]
+        lines += ["    If ok Then", "        passed = passed + 1", "    Else", "        failed = failed + 1", "    End If"]
+    lines += ['    RunCheckFixtureTests = "Check fixtures passed: " & passed & "  Failed: " & failed & vbLf & r',
+              "End Function", ""]
+    return lines
+
+
+def main(timeout: int = 240) -> int:
     if not SOFFICE:
         print("LibreOffice (soffice) not found", file=sys.stderr)
         return 2
@@ -218,14 +282,24 @@ def main() -> int:
         lib.mkdir(parents=True, exist_ok=True)
 
         out_file = tmp / "result.txt"
+        # results are appended per function, so a hang still shows how far it got
         runner = (
             "Option VBASupport 1\nOption Explicit\n"
-            "Sub Main\n"
+            "Private Sub Emit(ByVal s As String)\n"
             "    Dim f As Integer\n"
             "    f = FreeFile\n"
-            f'    Open "{out_file}" For Output As #f\n'
-            + "".join(f"    Print #f, {fn}()\n" for fn in TEST_FUNCTIONS) +
+            f'    Open "{out_file}" For Append As #f\n'
+            "    Print #f, s\n"
             "    Close #f\n"
+            "End Sub\n"
+            "Sub Main\n"
+            "    Dim r As String\n"
+            "    On Error GoTo Failed\n"
+            + "".join(f'    Emit "START {fn}"\n    r = {fn}()\n    Emit r\n' for fn in TEST_FUNCTIONS) +
+            '    Emit "ALL DONE"\n'
+            "    Exit Sub\n"
+            "Failed:\n"
+            '    Emit "RUNTIME ERROR " & Err.Number & ": " & Err.Description & " (line " & Erl & ")"\n'
             "End Sub\n"
         )
         names = []
@@ -249,14 +323,20 @@ def main() -> int:
         )
 
         url = "vnd.sun.star.script:Standard.PTRunner.Main?language=Basic&location=application"
-        proc = subprocess.run([SOFFICE, env_arg, "--headless", "--norestore", url],
-                              capture_output=True, text=True, timeout=300)
+        try:
+            proc = subprocess.run([SOFFICE, env_arg, "--headless", "--norestore", url],
+                                  capture_output=True, text=True, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            subprocess.run(["pkill", "-f", str(profile)], capture_output=True)
+            partial = out_file.read_text(encoding="utf-8", errors="replace") if out_file.exists() else ""
+            print(f"TIMEOUT after {timeout}s (endless loop or a Basic error dialog). Output so far:\n{partial}")
+            return 2
         if not out_file.exists():
             print("No test output. LibreOffice said:\n", proc.stdout, proc.stderr, file=sys.stderr)
             return 2
         result = out_file.read_text(encoding="utf-8", errors="replace")
-        print(result)
-        ok = len(re.findall(r"Failed: 0\b", result)) == len(TEST_FUNCTIONS)
+        print(re.sub(r"^START .*\n", "", result, flags=re.M))
+        ok = len(re.findall(r"Failed: 0\b", result)) == len(TEST_FUNCTIONS) and "ALL DONE" in result
         return 0 if ok else 1
 
 

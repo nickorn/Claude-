@@ -8,7 +8,7 @@ Option Explicit
 Public Function DefaultSettingsJson() As String
     Dim s As String
     s = s & "{" & vbLf
-    s = s & "  ""version"": ""0.2.0""," & vbLf
+    s = s & "  ""version"": ""0.3.0""," & vbLf
     s = s & "  ""language"": {" & vbLf
     s = s & "    ""ui"": ""de""," & vbLf
     s = s & "    ""claimLanguageDetection"": ""auto""" & vbLf
@@ -43,6 +43,9 @@ Public Function DefaultSettingsJson() As String
     s = s & "  }," & vbLf
     s = s & "  ""check"": {" & vbLf
     s = s & "    ""commentAuthor"": ""PatentCheck""," & vbLf
+    s = s & "    ""createReport"": false," & vbLf
+    s = s & "    ""flagEveryMultipleDependency"": false," & vbLf
+    s = s & "    ""maxFormattingFindings"": 20," & vbLf
     s = s & "    ""enabled"": {" & vbLf
     s = s & "      ""numbering"": true," & vbLf
     s = s & "      ""punctuation"": true," & vbLf

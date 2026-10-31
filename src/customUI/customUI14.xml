@@ -9,6 +9,32 @@
                   screentip="Ansprüche neu nummerieren"
                   supertip="Nummeriert alle Ansprüche in Dokumentreihenfolge fortlaufend (auch Zusatznummern wie 1a, 1.1) und passt alle Rückbezüge an. Unklare Stellen werden als Kommentar markiert."/>
         </group>
+        <group id="grpCheck" label="Prüfung">
+          <button id="btnFullCheck" label="Vollprüfung" size="large" imageMso="ReviewNewComment"
+                  onAction="OnAction_FullCheck"
+                  screentip="Vollprüfung"
+                  supertip="Prüft alle Ansprüche (alle in den Einstellungen aktivierten Prüfungen). Befunde werden als Kommentar von „PatentCheck“ eingefügt und farbig markiert; frühere Prüfmarkierungen werden vorher entfernt."/>
+          <menu id="mnuSingleCheck" label="Einzelprüfung" size="large" imageMso="FindDialog"
+                screentip="Einzelprüfung" supertip="Führt nur eine einzelne Prüfung aus.">
+            <button id="btnCheck_numbering" label="Nummerierung" tag="numbering" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_punctuation" label="Zeichensetzung" tag="punctuation" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_spacing" label="Abstände" tag="spacing" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_formatting" label="Formatierung" tag="formatting" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_backReferences" label="Rückbezüge" tag="backReferences" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_independentClaims" label="Unabhängige Ansprüche" tag="independentClaims" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_multipleDependencies" label="Mehrfachabhängigkeit" tag="multipleDependencies" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_antecedentBasis" label="Bezugsbasis" tag="antecedentBasis" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_referenceSigns" label="Bezugszeichen" tag="referenceSigns" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_blacklist" label="Unklare Begriffe" tag="blacklist" onAction="OnAction_CheckSingle"/>
+            <button id="btnCheck_categories" label="Kategorien" tag="categories" onAction="OnAction_CheckSingle"/>
+          </menu>
+          <button id="btnRemoveMarks" label="Prüfmarkierungen entfernen" imageMso="ReviewDeleteComment"
+                  onAction="OnAction_RemoveMarks"
+                  supertip="Entfernt nur die Kommentare und Markierungen von Patent-Tools; eigene Kommentare bleiben erhalten."/>
+          <button id="btnReport" label="Prüfbericht" imageMso="TableInsert"
+                  onAction="OnAction_Report"
+                  supertip="Führt die Vollprüfung aus und listet alle Befunde in einem neuen Dokument (das Original bleibt unverändert)."/>
+        </group>
         <group id="grpSettings" label="Einstellungen">
           <button id="btnOpenSettings" label="Einstellungen öffnen" imageMso="PropertySheet"
                   onAction="OnAction_OpenSettings"

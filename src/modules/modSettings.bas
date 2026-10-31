@@ -81,6 +81,30 @@ Private Sub LoadSettings()
     If Len(errText) > 0 Then MsgBox errText, vbExclamation, AppTitle()
 End Sub
 
+' Terms of blacklist.json for "en" or "de". Falls back to the embedded default
+' list if the user's file cannot be read.
+Public Function GetBlacklistTerms(ByVal lang As String) As Collection
+    Dim root As Object, terms As New Collection, v As Variant, errText As String
+    On Error Resume Next
+    EnsureUserConfig
+    Err.Clear
+    Set root = JsonParse(ReadUtf8File(BlacklistPath()))
+    If Err.Number <> 0 Then
+        errText = MsgSettingsError(BlacklistPath(), Err.Description)
+        Set root = Nothing
+    End If
+    Err.Clear
+    On Error GoTo 0
+    If Len(errText) > 0 Then MsgBox errText, vbExclamation, AppTitle()
+    If root Is Nothing Then Set root = JsonParse(DecodeJsonUnicode(DefaultBlacklistJson()))
+    If root.Exists(lang) Then
+        For Each v In root.Item(lang)
+            If Not IsObject(v) Then terms.Add CStr(v)
+        Next v
+    End If
+    Set GetBlacklistTerms = terms
+End Function
+
 ' ---------------------------------------------------------------- UTF-8 files
 
 Public Function ReadUtf8File(ByVal path As String) As String

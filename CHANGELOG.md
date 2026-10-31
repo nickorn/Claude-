@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0] – 2026-10-31
+### Added
+- MVP-2 "Vollprüfung": numbering, punctuation (";", "; and"/"; und" before the last feature incl. nested lists, full stop, text after the full stop), spacing (empty paragraphs between claims, double spaces, space before punctuation), formatting (font, size, line spacing, paragraph spacing), back-references (unknown, self, forward), independent claims with same-category references, multiple dependencies (multiple-dependent on multiple-dependent; every one optional), antecedent basis EN/DE along the dependency chain incl. singular/plural, reference signs (same term = same sign, same sign = same term, missing at first mention per claim, format ";"/", "), blacklist, categories (dependent claim of another category, second independent claim of a category).
+- Findings as PatentCheck comments with highlight colour per check; "Einzelprüfung" menu; "Prüfmarkierungen entfernen" (only tool comments/highlights); "Prüfbericht" as new document.
+- Settings `check.createReport`, `check.flagEveryMultipleDependency`, `check.maxFormattingFindings`.
+- Check fixtures with expected counts (EN/DE seeded errors, EP 20 187 485.6 original + amended); unit tests incl. the reference table.
+
 ## [0.2.0] – 2026-10-30
 ### Added
 - MVP-1 "Neu nummerieren": renumbers claims in document order (supplementary labels 1a, 1.1, 1a.1, 1a1 …), updates EN/DE back-references incl. lists, ranges ("to", "bis", "-"), compounds ("Patentanspruch") and inflections ("Anspruchs", "Ansprüchen"). Respects existing Track Changes; aborts on duplicate labels; flags unknown references and changed ranges as PatentCheck comments; one undo step.

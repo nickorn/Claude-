@@ -62,6 +62,7 @@ Status: living document. Round 1 (Q1-60) and round 2 (R2-1 to R2-14) answered on
 - Claim category detection (method, device, system, computer program, storage medium) and correspondence between independent claims.
 - Blacklist of unclear terms: Claude supplies the seed list (EN + DE) in blacklist.json; Niklas amends it later.
 - NOT wanted: fee or claim-count warnings, term-consistency or near-duplicate checks, a support check against the description, feature-analysis tables, a DE/EN glossary.
+- Implementation decisions (Claude, 31.10.2026 – Niklas may overrule): a new check first removes the previous PatentCheck marks; plain multiple dependency is only flagged with `check.flagEveryMultipleDependency` (default off), multiple-dependent on multiple-dependent always; a signed term must carry its sign at its first mention in every claim; independent claim = no reference in the preamble (text before the first ":", "," or "comprising"/"wobei"/...); German phrases end at the capitalised noun; formatting findings are capped (`check.maxFormattingFindings`, default 20) plus one summary note.
 - Findings output: Word comments under a fixed author name ("PatentCheck") plus coloured highlighting, one colour per check category. A ribbon button "Prüfmarkierungen entfernen" removes only these. An optional summary report opens as a new document (table: claim no., check, finding, text excerpt).
 
 ## 6. Amendments and prosecution

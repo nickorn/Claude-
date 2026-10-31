@@ -35,12 +35,12 @@ Private Function L(ParamArray lines() As Variant) As Variant
     L = arr
 End Function
 
-Private Sub Check(ByVal name As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
+Private Sub Check(ByVal testName As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
     If cond Then
         mPassed = mPassed + 1
     Else
         mFailed = mFailed + 1
-        mLog = mLog & "FAIL " & name & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
+        mLog = mLog & "FAIL " & testName & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
     End If
 End Sub
 
@@ -57,8 +57,8 @@ Private Function Joined(ByVal res As Variant) As String
     End If
 End Function
 
-Private Sub ExpectEq(ByVal name As String, ByVal got As String, ByVal expected As String)
-    Check name, got = expected, "got [" & got & "] expected [" & expected & "]"
+Private Sub ExpectEq(ByVal testName As String, ByVal got As String, ByVal expected As String)
+    Check testName, got = expected, "got [" & got & "] expected [" & expected & "]"
 End Sub
 
 Private Sub TestVerbForms()

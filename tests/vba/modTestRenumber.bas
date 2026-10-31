@@ -47,12 +47,12 @@ Private Function L(ParamArray lines() As Variant) As Variant
     L = arr
 End Function
 
-Private Sub Check(ByVal name As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
+Private Sub Check(ByVal testName As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
     If cond Then
         mPassed = mPassed + 1
     Else
         mFailed = mFailed + 1
-        mLog = mLog & "FAIL " & name & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
+        mLog = mLog & "FAIL " & testName & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
     End If
 End Sub
 
@@ -61,21 +61,21 @@ Private Function Visible(ByVal s As String) As String
 End Function
 
 ' Runs the planner and compares every paragraph with expected (| = TAB).
-Private Sub ExpectRenumber(ByVal name As String, ByVal inputLines As Variant, _
+Private Sub ExpectRenumber(ByVal testName As String, ByVal inputLines As Variant, _
         ByVal expectedLines As Variant, ByVal expectedFlags As Long)
     Dim ops As New Collection, errMsg As String, n As Long, outLines As Variant
     Dim flagLog As String, i As Long, flags As Long
     If Not PlanRenumber(inputLines, ops, errMsg, n) Then
-        Check name & " (plan)", False, errMsg
+        Check testName & " (plan)", False, errMsg
         Exit Sub
     End If
     outLines = ApplyOpsToTexts(inputLines, ops, flagLog)
     For i = LBound(expectedLines) To UBound(expectedLines)
-        Check name & " line " & i, outLines(i) = expectedLines(i), _
+        Check testName & " line " & i, outLines(i) = expectedLines(i), _
             "got [" & Visible(CStr(outLines(i))) & "] expected [" & Visible(CStr(expectedLines(i))) & "]"
     Next i
     If Len(flagLog) > 0 Then flags = UBound(Split(flagLog, vbLf))
-    Check name & " flags", flags = expectedFlags, "got " & flags & " expected " & expectedFlags & vbLf & flagLog
+    Check testName & " flags", flags = expectedFlags, "got " & flags & " expected " & expectedFlags & vbLf & flagLog
 End Sub
 
 ' ---------------------------------------------------------------- tests

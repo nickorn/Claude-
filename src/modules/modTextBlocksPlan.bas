@@ -118,16 +118,16 @@ End Function
 ' Distinct placeholders "[NAME]" in order of appearance (letters, digits, _ and
 ' -; at least one letter, so paragraph numbers like [0012] are no placeholders).
 Public Function FindPlaceholders(ByVal t As String) As Collection
-    Dim found As New Collection, q As Long, e As Long, name As String, seen As String
+    Dim found As New Collection, q As Long, e As Long, itemName As String, seen As String
     q = InStr(1, t, "[")
     Do While q > 0
         e = InStr(q + 1, t, "]")
         If e = 0 Then Exit Do
-        name = Mid$(t, q + 1, e - q - 1)
-        If IsPlaceholderName(name) Then
-            If InStr(1, seen, Chr$(1) & name & Chr$(1)) = 0 Then
-                seen = seen & Chr$(1) & name & Chr$(1)
-                found.Add name
+        itemName = Mid$(t, q + 1, e - q - 1)
+        If IsPlaceholderName(itemName) Then
+            If InStr(1, seen, Chr$(1) & itemName & Chr$(1)) = 0 Then
+                seen = seen & Chr$(1) & itemName & Chr$(1)
+                found.Add itemName
             End If
         End If
         q = InStr(q + 1, t, "[")
@@ -135,11 +135,11 @@ Public Function FindPlaceholders(ByVal t As String) As Collection
     Set FindPlaceholders = found
 End Function
 
-Private Function IsPlaceholderName(ByVal name As String) As Boolean
+Private Function IsPlaceholderName(ByVal itemName As String) As Boolean
     Dim i As Long, c As String, hasLetter As Boolean
-    If Len(name) = 0 Or Len(name) > 30 Then Exit Function
-    For i = 1 To Len(name)
-        c = Mid$(name, i, 1)
+    If Len(itemName) = 0 Or Len(itemName) > 30 Then Exit Function
+    For i = 1 To Len(itemName)
+        c = Mid$(itemName, i, 1)
         If IsLetterChar(c) Then
             hasLetter = True
         ElseIf Not (IsDigitChar(c) Or c = "_" Or c = "-") Then
@@ -150,8 +150,8 @@ Private Function IsPlaceholderName(ByVal name As String) As Boolean
 End Function
 
 ' Default value offered for a placeholder (today's date for [DATUM]/[DATE]).
-Public Function PlaceholderDefault(ByVal name As String) As String
-    Select Case UCase$(name)
+Public Function PlaceholderDefault(ByVal itemName As String) As String
+    Select Case UCase$(itemName)
         Case "DATUM", "DATE"
             PlaceholderDefault = Format$(Date, "dd.mm.yyyy")
     End Select
@@ -159,15 +159,15 @@ End Function
 
 ' Expands %VARIABLE% parts of a path with the environment.
 Public Function ExpandEnvironment(ByVal path As String) As String
-    Dim q As Long, e As Long, name As String
+    Dim q As Long, e As Long, itemName As String
     q = InStr(1, path, "%")
     Do While q > 0
         e = InStr(q + 1, path, "%")
         If e = 0 Then Exit Do
-        name = Mid$(path, q + 1, e - q - 1)
-        If Len(name) > 0 And Len(Environ$(name)) > 0 Then
-            path = Left$(path, q - 1) & Environ$(name) & Mid$(path, e + 1)
-            q = InStr(q + Len(Environ$(name)), path, "%")
+        itemName = Mid$(path, q + 1, e - q - 1)
+        If Len(itemName) > 0 And Len(Environ$(itemName)) > 0 Then
+            path = Left$(path, q - 1) & Environ$(itemName) & Mid$(path, e + 1)
+            q = InStr(q + Len(Environ$(itemName)), path, "%")
         Else
             q = InStr(e + 1, path, "%")
         End If

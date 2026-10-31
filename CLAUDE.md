@@ -49,6 +49,8 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 - VBA sources must be pure ASCII with CRLF line endings (VBA editor imports in the ANSI code page; `tools/build.py` checks both): German texts use the tokens of `modStrings.Txt` (`{ue}` …) or `ChrW`.
 - Keep Word-independent logic in pure modules (e.g. `modClaimParse`: plain strings in, planned edits out) and the Word object model in thin modules (e.g. `modRenumber`). Pure logic is tested headless with `python3 tools/run_vba_tests.py` (LibreOffice Basic): unit tests in `tests/vba/` plus every `tests/fixtures/*.docx` against its `.expected.txt` (`tools/make_fixtures.py`). Run it before every commit; Word-level behaviour still needs a check in Word by Niklas.
 - Ribbon callbacks: `Public Sub OnAction_xyz(control As IRibbonControl)`; dynamic menus via `getContent`.
+- `tools/vba_lint.py` (run by the build) is the compile check for code LibreOffice cannot run: undeclared names, calls to Private procedures of other modules, ambiguous public names, ByRef type mismatches, block balance, reserved words as variable names (`name`, `date`, ...), VBA line limits. Add Word/VBA names to its allow-lists only after checking they really exist. The build also validates the ribbon XML attributes and that every callback exists in `modRibbon`.
+- Portability notes from LibreOffice runs: avoid typed object arrays (`x() As Collection`, use Variant), always initialise Variant function results, avoid `Replace(..., vbTextCompare)` (use `ReplaceText`), and remember LibreOffice passes ByVal arrays by reference.
 
 ## Roadmap (in order)
 1. ✅ **MVP-1** Claim renumbering + back-reference update (supplementary numbers, position-based mapping, EN+DE references, ranges).

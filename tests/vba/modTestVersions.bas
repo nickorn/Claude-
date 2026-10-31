@@ -36,17 +36,17 @@ Public Function RunVersionTests() As String
     RunVersionTests = "Passed: " & mPassed & "  Failed: " & mFailed & vbLf & mLog
 End Function
 
-Private Sub Check(ByVal name As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
+Private Sub Check(ByVal testName As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
     If cond Then
         mPassed = mPassed + 1
     Else
         mFailed = mFailed + 1
-        mLog = mLog & "FAIL " & name & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
+        mLog = mLog & "FAIL " & testName & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
     End If
 End Sub
 
 ' Applies the plan to the text and compares.
-Private Sub ExpectPlan(ByVal name As String, ByVal t As String, ByVal status As String, ByVal known As String, ByVal expected As String)
+Private Sub ExpectPlan(ByVal testName As String, ByVal t As String, ByVal status As String, ByVal known As String, ByVal expected As String)
     Dim plan As Variant, got As String
     plan = PlanFooterLeft(t, status, known)
     Select Case plan(0)
@@ -57,13 +57,13 @@ Private Sub ExpectPlan(ByVal name As String, ByVal t As String, ByVal status As 
         Case Else
             got = "<" & plan(0) & ">"
     End Select
-    Check name, got = expected, "got [" & Replace(got, vbTab, "|") & "] expected [" & Replace(expected, vbTab, "|") & "]"
+    Check testName, got = expected, "got [" & Replace(got, vbTab, "|") & "] expected [" & Replace(expected, vbTab, "|") & "]"
     ' whatever happens, the text after the first TAB is preserved
-    If InStr(t, vbTab) > 0 Then Check name & " right part kept", Mid$(got, InStr(got, vbTab)) = Mid$(t, InStr(t, vbTab))
+    If InStr(t, vbTab) > 0 Then Check testName & " right part kept", Mid$(got, InStr(got, vbTab)) = Mid$(t, InStr(t, vbTab))
 End Sub
 
-Private Sub ExpectAction(ByVal name As String, ByVal t As String, ByVal status As String, ByVal known As String, ByVal action As String)
+Private Sub ExpectAction(ByVal testName As String, ByVal t As String, ByVal status As String, ByVal known As String, ByVal action As String)
     Dim plan As Variant
     plan = PlanFooterLeft(t, status, known)
-    Check name, plan(0) = action, "got " & plan(0) & " expected " & action
+    Check testName, plan(0) = action, "got " & plan(0) & " expected " & action
 End Sub

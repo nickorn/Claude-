@@ -40,7 +40,7 @@ Fail:
 End Sub
 
 Private Function ImportFolder(ByVal proj As Object, ByVal folder As String, ByVal pattern As String) As Long
-    Dim files As New Collection, f As Variant, name As String, comp As Object
+    Dim files As New Collection, f As Variant, compName As String, comp As Object
     If Len(Dir$(folder, vbDirectory)) = 0 Then Exit Function
     f = Dir$(folder & "\" & pattern)
     Do While Len(f) > 0
@@ -48,13 +48,13 @@ Private Function ImportFolder(ByVal proj As Object, ByVal folder As String, ByVa
         f = Dir$()
     Loop
     For Each f In files
-        name = Left$(f, InStrRev(f, ".") - 1)
+        compName = Left$(f, InStrRev(f, ".") - 1)
         Set comp = Nothing
         On Error Resume Next
-        Set comp = proj.VBComponents(name)
+        Set comp = proj.VBComponents(compName)
         On Error GoTo 0
         If Not comp Is Nothing Then
-            comp.Name = name & "_old" ' free the name at once; removal may be deferred
+            comp.Name = compName & "_old" ' free the name at once; removal may be deferred
             proj.VBComponents.Remove comp
         End If
         proj.VBComponents.Import folder & "\" & f

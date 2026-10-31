@@ -24,12 +24,12 @@ Public Function RunJsonTests() As String
     RunJsonTests = "Passed: " & mPassed & "  Failed: " & mFailed & vbLf & mLog
 End Function
 
-Private Sub Check(ByVal name As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
+Private Sub Check(ByVal testName As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
     If cond Then
         mPassed = mPassed + 1
     Else
         mFailed = mFailed + 1
-        mLog = mLog & "FAIL " & name & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
+        mLog = mLog & "FAIL " & testName & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
     End If
 End Sub
 

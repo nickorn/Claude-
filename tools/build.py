@@ -5,7 +5,9 @@ Steps:
   1. Generate src/modules/modDefaults.bas from config/settings.json and
      config/blacklist.json (embedded defaults for the first run).
   2. Check the VBA sources in src/, tests/vba/ and tools/ (ASCII only, CRLF,
-     Option Explicit, VB_Name = file name).
+     Option Explicit, VB_Name = file name, declarations, blocks) and run
+     tools/vba_lint.py (undeclared names, ByRef types, reserved names, ...).
+     The ribbon XML is checked against the customUI attributes and callbacks.
   3. Assemble build/PatentTools.dotm: an empty macro-enabled template with the
      ribbon from src/customUI. The VBA modules are imported afterwards in Word
      (see README) because vbaProject.bin can only be written by Office.
@@ -168,10 +170,60 @@ def block_balance_problems(path: Path, text: str) -> list[str]:
 
 # ---------------------------------------------------------------- package
 
+# customUI 2009/07: attributes this project may use per element. Word drops the
+# WHOLE ribbon tab without any message if one attribute or element is invalid.
+COMMON = {"id", "label", "tag", "screentip", "supertip", "imageMso", "image", "visible", "enabled",
+          "getLabel", "getEnabled", "getVisible", "keytip", "showLabel", "showImage"}
+UI_ATTRS = {
+    "customUI": {"xmlns", "onLoad", "loadImage"},
+    "ribbon": {"startFromScratch"},
+    "tabs": set(),
+    "tab": {"id", "label", "visible", "keytip", "insertAfterMso", "insertBeforeMso", "getLabel"},
+    "group": {"id", "label", "visible", "keytip", "imageMso", "image", "screentip", "supertip"},
+    "button": COMMON | {"size", "onAction", "description"},
+    "menu": COMMON | {"size", "itemSize", "description"},
+    "dynamicMenu": COMMON | {"size", "getContent", "invalidateContentOnDrop", "description"},
+    "menuSeparator": {"id", "title"},
+    "separator": {"id", "visible"},
+}
+LIMITS = {"label": 1024, "screentip": 1024, "supertip": 1024, "tag": 1024}
+
+
+def ribbon_problems(data: bytes) -> list[str]:
+    import xml.dom.minidom
+    dom = xml.dom.minidom.parseString(data)
+    problems, ids = [], set()
+    for el in dom.getElementsByTagName("*"):
+        name = el.tagName
+        if name not in UI_ATTRS:
+            problems.append(f"customUI14.xml: element <{name}> not allowed here")
+            continue
+        for attr in el.attributes.keys():
+            if attr not in UI_ATTRS[name]:
+                problems.append(f"customUI14.xml: <{name}> has no attribute '{attr}'")
+            if attr in LIMITS and len(el.getAttribute(attr)) > LIMITS[attr]:
+                problems.append(f"customUI14.xml: {attr} of {el.getAttribute('id')} longer than {LIMITS[attr]}")
+        if el.hasAttribute("id"):
+            i = el.getAttribute("id")
+            if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", i) or i in ids:
+                problems.append(f"customUI14.xml: id '{i}' invalid or duplicate")
+            ids.add(i)
+        if name in ("button", "menu", "dynamicMenu") and el.parentNode.tagName == "group" and not el.hasAttribute("label"):
+            problems.append(f"customUI14.xml: {el.getAttribute('id')} has no label")
+    callbacks = {el.getAttribute(a) for el in dom.getElementsByTagName("*")
+                 for a in ("onAction", "getContent", "onLoad") if el.hasAttribute(a)}
+    ribbon_module = (SRC / "modules" / "modRibbon.bas").read_text(encoding="ascii")
+    for cb in sorted(callbacks):
+        if not re.search(rf"^Public Sub {cb}\(", ribbon_module, re.M):
+            problems.append(f"customUI14.xml: callback {cb} not found as Public Sub in modRibbon.bas")
+    return problems
+
+
 def custom_ui() -> bytes:
     data = (SRC / "customUI" / "customUI14.xml").read_bytes()
-    import xml.dom.minidom
-    xml.dom.minidom.parseString(data)  # fail early on malformed XML
+    problems = ribbon_problems(data)
+    if problems:
+        sys.exit("\n".join(problems))
     return data
 
 
@@ -209,6 +261,11 @@ def main() -> int:
 
     print("generated", generate_defaults().relative_to(ROOT))
     problems = check_sources()
+    import subprocess
+    lint = subprocess.run([sys.executable, str(ROOT / "tools" / "vba_lint.py")], capture_output=True, text=True)
+    print(lint.stdout.strip().splitlines()[-1])
+    if lint.returncode != 0:
+        problems.append(lint.stdout.strip())
     if problems:
         print("\n".join(problems), file=sys.stderr)
         return 1

@@ -428,8 +428,8 @@ Public Function MsgTextBlockMissing(ByVal path As String) As String
     MsgTextBlockMissing = Txt("Der Textbaustein wurde nicht gefunden:") & vbCr & path
 End Function
 
-Public Function MsgPlaceholderPrompt(ByVal name As String) As String
-    MsgPlaceholderPrompt = Txt("Wert f{ue}r den Platzhalter [") & name & "]:" & vbCr & vbCr & _
+Public Function MsgPlaceholderPrompt(ByVal phName As String) As String
+    MsgPlaceholderPrompt = Txt("Wert f{ue}r den Platzhalter [") & phName & "]:" & vbCr & vbCr & _
         Txt("(Leer lassen oder Abbrechen: Platzhalter bleibt stehen und wird gelb markiert.)")
 End Function
 

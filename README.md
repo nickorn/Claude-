@@ -7,7 +7,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 - Referenzmaterial: `docs/reference/` (EP 20 187 485.6)
 - Versionen: `CHANGELOG.md`
 
-## Stand (Version 0.3.0)
+## Stand (Version 0.8.0)
 
 | Funktion | Status |
 |---|---|
@@ -39,23 +39,37 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 
 ## Installation (Testbetrieb auf deinem PC)
 
-Einmalig in Word: *Datei → Optionen → Trust Center → Einstellungen für das Trust Center → Makroeinstellungen →* „Zugriff auf das VBA-Projektobjektmodell vertrauen“ aktivieren (nur für den Import-Helfer nötig).
+### Einmalige Vorbereitung in Word
+1. *Datei → Optionen → Trust Center → Einstellungen für das Trust Center → Makroeinstellungen →* „Zugriff auf das VBA-Projektobjektmodell vertrauen“ anhaken (nur für den Import-Helfer nötig).
+2. *Datei → Optionen → Erweitert → Allgemein →* „Fehler in Benutzeroberfläche von Add-Ins anzeigen“ anhaken. Sonst lässt Word das Menüband bei einem Fehler kommentarlos weg; so siehst du die Fehlermeldung (nur für den Testbetrieb).
 
-1. Repository herunterladen (GitHub → *Code → Download ZIP*) und entpacken.
-2. `PatentTools.dotm` besorgen: entweder die von Claude gelieferte Datei oder selbst erzeugen mit `python tools/build.py` (liegt dann in `build/`).
+### Installation
+1. Repository herunterladen (GitHub → *Code → Download ZIP*). **Vor dem Entpacken:** Rechtsklick auf die ZIP-Datei → *Eigenschaften* → unten „Zulassen“ anhaken → *OK*. Sonst markiert Windows alle Dateien als „aus dem Internet“ und Office blockiert die Makros. Dasselbe für eine separat erhaltene `PatentTools.dotm`.
+2. ZIP entpacken. `PatentTools.dotm` (von Claude geliefert oder mit `python tools/build.py` erzeugt, liegt dann in `build/`) in einen Arbeitsordner legen, z. B. den Desktop – **noch nicht** in den STARTUP-Ordner.
 3. Import-Helfer einmalig in die Normal.dotm holen: Word → Alt+F11 → links „Normal“ markieren → *Datei → Datei importieren…* → `tools/PT_ImportModules.bas`.
-4. In Word `PatentTools.dotm` über **Datei → Öffnen** öffnen (nicht per Doppelklick – das würde ein neues Dokument daraus erzeugen).
-5. Alt+F8 → `PT_ImportModules` → den Ordner `src` des Repositorys wählen. Alle Module werden importiert (ältere Versionen ersetzt).
-6. Strg+S, `PatentTools.dotm` schließen.
-7. `PatentTools.dotm` in den STARTUP-Ordner kopieren: `%APPDATA%\Microsoft\Word\STARTUP`. Word neu starten → Tab „Patent-Tools“ erscheint.
+4. In Word die `PatentTools.dotm` über **Datei → Öffnen** öffnen (nicht per Doppelklick – das würde ein neues Dokument daraus erzeugen).
+5. Alt+F8 → `PT_ImportModules` → *Ausführen* → den Ordner `src` des entpackten Repositorys wählen. Die Meldung nennt die Zahl der importierten Module.
+6. Alt+F11 → Menü *Debuggen → Kompilieren von TemplateProject* (bzw. „PatentTools“). Es darf **keine** Meldung erscheinen. Falls doch: Screenshot an Claude.
+7. Strg+S, die `PatentTools.dotm` schließen.
+8. **Word ganz schließen.** Die Datei in den STARTUP-Ordner kopieren: im Explorer `%APPDATA%\Microsoft\Word\STARTUP` in die Adresszeile eingeben.
+9. Word starten → Tab „Patent-Tools“ erscheint. *Info* zeigt die Version.
 
 Beim ersten Start legt das Makro `%APPDATA%\PatentTools\` mit `settings.json`, `blacklist.json` und `textblocks\` an.
 
 **Textbausteine einrichten:** *Textbausteine → Beispielbausteine importieren…* → Ordner `config\textblocks` des Repositorys wählen (kopiert die neutralen Beispiele, überschreibt nichts). Eigene Bausteine einfach als `.docx` in den Ordner legen (*Ordner öffnen*), z. B. `EPA\15_Mein Baustein.docx` – erscheint sofort im Menü.
 
-**Update auf eine neue Version:** Schritte 4–7 wiederholen (bei geändertem Menüband vorher eine frische `PatentTools.dotm` verwenden).
+### Update auf eine neue Version
+Word schließen, die neue `PatentTools.dotm` (oder die alte aus dem Arbeitsordner) verwenden und die Schritte 1–9 wiederholen; im STARTUP-Ordner die alte Datei überschreiben. Word sperrt die Datei im STARTUP-Ordner, solange es läuft – daher vorher schließen. Deine Einstellungen in `%APPDATA%\PatentTools\` bleiben erhalten; neue Einstellungen gelten automatisch mit ihren Standardwerten.
 
-Falls beim Kompilieren `IRibbonControl` oder `msoFileDialogFolderPicker` unbekannt ist: im VBA-Editor *Extras → Verweise* „Microsoft Office 16.0 Object Library“ aktivieren.
+### Wenn etwas nicht klappt
+| Symptom | Ursache / Abhilfe |
+|---|---|
+| Tab „Patent-Tools“ fehlt | Liegt die Datei im STARTUP-Ordner? *Datei → Optionen → Add-Ins → Verwalten: Vorlagen → Gehe zu* – ist „PatentTools.dotm“ angehakt? Mit Vorbereitung 2 zeigt Word eine Fehlermeldung zum Menüband – bitte an Claude schicken. |
+| Gelber/roter Balken „Makros deaktiviert“ bzw. „Sicherheitsrisiko“ | Datei war als „aus dem Internet“ markiert: Installation Schritt 1 („Zulassen“), dann Schritte 2–9. Der STARTUP-Ordner ist standardmäßig ein vertrauenswürdiger Speicherort (*Trust Center → Vertrauenswürdige Speicherorte*). |
+| Beim Kompilieren „Mehrdeutiger Name“ | Ein Modul ist doppelt vorhanden (z. B. `modCheck` und `modCheck1`): das doppelte im VBA-Editor entfernen und Schritt 5 wiederholen. |
+| `IRibbonControl` oder `msoFileDialogFolderPicker` unbekannt | VBA-Editor → *Extras → Verweise* → „Microsoft Office 16.0 Object Library“ anhaken. |
+| `PT_ImportModules` meldet einen Fehler | Vorbereitung 1 fehlt, oder die `PatentTools.dotm` ist nicht über *Datei → Öffnen* geöffnet. |
+| Eine Funktion meldet „Unerwarteter Fehler“ | Mit Strg+Z rückgängig machen und die Meldung samt Testdokument an Claude schicken. |
 
 ## Testen
 

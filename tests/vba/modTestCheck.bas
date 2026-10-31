@@ -47,12 +47,12 @@ Private Function L(ParamArray lines() As Variant) As Variant
     L = arr
 End Function
 
-Private Sub Check(ByVal name As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
+Private Sub Check(ByVal testName As String, ByVal cond As Boolean, Optional ByVal detail As String = "")
     If cond Then
         mPassed = mPassed + 1
     Else
         mFailed = mFailed + 1
-        mLog = mLog & "FAIL " & name & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
+        mLog = mLog & "FAIL " & testName & IIf(Len(detail) > 0, ": " & detail, "") & vbLf
     End If
 End Sub
 
@@ -70,8 +70,8 @@ Private Function Describe(ByVal findings As Collection) As String
     Next f
 End Function
 
-Private Sub ExpectCount(ByVal name As String, ByVal findings As Collection, ByVal expected As Long)
-    Check name, findings.Count = expected, "got " & findings.Count & " expected " & expected & Describe(findings)
+Private Sub ExpectCount(ByVal testName As String, ByVal findings As Collection, ByVal expected As Long)
+    Check testName, findings.Count = expected, "got " & findings.Count & " expected " & expected & Describe(findings)
 End Sub
 
 Private Function HasMsg(ByVal findings As Collection, ByVal part As String) As Boolean
@@ -84,8 +84,8 @@ Private Function HasMsg(ByVal findings As Collection, ByVal part As String) As B
     Next f
 End Function
 
-Private Sub ExpectMsg(ByVal name As String, ByVal findings As Collection, ByVal part As String)
-    Check name, HasMsg(findings, part), "no finding containing [" & part & "]" & Describe(findings)
+Private Sub ExpectMsg(ByVal testName As String, ByVal findings As Collection, ByVal part As String)
+    Check testName, HasMsg(findings, part), "no finding containing [" & part & "]" & Describe(findings)
 End Sub
 
 ' ---------------------------------------------------------------- tests

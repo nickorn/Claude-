@@ -5,5 +5,5 @@
   - `renumber_EN_large`: 218 claims for performance.
   - `check_EN_seeded`, `check_DE_seeded`: seeded errors for every check; `<name>.check.txt` = expected findings per check (formatting only verifiable in Word).
   - `EP20187485_original`, `EP20187485_amended`: the reference claims with indentation; expected findings follow the table in `docs/reference/EP20187485-claims.md`.
-- `vba/`: VBA unit tests (`PT_RunRenumberTests`, `PT_RunJsonTests`, `PT_RunCheckTests`), runnable in Word or headless via `python3 tools/run_vba_tests.py`.
+- `vba/`: VBA unit tests (`PT_RunRenumberTests`, `PT_RunJsonTests`, `PT_RunCheckTests`, `PT_RunFormatTests`), runnable in Word or headless via `python3 tools/run_vba_tests.py`.
 - `expected/`: Niklas' corrected versions as Word marked-up documents (Track Changes) = expected results.

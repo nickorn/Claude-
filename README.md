@@ -14,7 +14,8 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 | **Neu nummerieren** (MVP-1) | fertig, in Word noch zu testen |
 | **Vollprüfung, Einzelprüfung, Prüfmarkierungen entfernen, Prüfbericht** (MVP-2) | fertig, in Word noch zu testen |
 | Einstellungen öffnen, Info | fertig |
-| Formatierung, Reinschrift/markierte Fassung, Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
+| **Formatierung anwenden, Doppelte Leerzeichen, Zeichensetzung, Bezugszeichen-Format** (MVP-3) | fertig, in Word noch zu testen |
+| Reinschrift/markierte Fassung, Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
 
 ### Prüfung – was passiert
 - **Vollprüfung** führt alle in `settings.json` (`check.enabled`) aktivierten Prüfungen aus; **Einzelprüfung** nur eine.

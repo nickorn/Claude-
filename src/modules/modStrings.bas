@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.3.0"
+Public Const APP_VERSION As String = "0.4.0"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"
@@ -339,4 +339,41 @@ End Function
 
 Public Function ReportNoFindings() As String
     ReportNoFindings = Txt("Keine Auff{ae}lligkeiten gefunden.")
+End Function
+
+' ---------------------------------------------------------------- formatting (MVP-3)
+
+' kind: 0 = layout, 1 = spaces, 2 = punctuation, 3 = reference signs
+Public Function FormatCommandName(ByVal kind As Long) As String
+    Select Case kind
+        Case 0: FormatCommandName = "Formatierung anwenden"
+        Case 1: FormatCommandName = "Doppelte Leerzeichen"
+        Case 2: FormatCommandName = "Zeichensetzung"
+        Case 3: FormatCommandName = "Bezugszeichen-Format"
+    End Select
+End Function
+
+Public Function UndoTitleFormat(ByVal kind As Long) As String
+    UndoTitleFormat = AppTitle() & ": " & FormatCommandName(kind)
+End Function
+
+Public Function MsgFormatTextDone(ByVal kind As Long, ByVal applied As Long, ByVal failed As Long) As String
+    Dim s As String
+    If applied = 0 And failed = 0 Then
+        MsgFormatTextDone = FormatCommandName(kind) & Txt(": nichts zu korrigieren.")
+        Exit Function
+    End If
+    s = FormatCommandName(kind) & ": " & applied & Txt(" Stelle(n) korrigiert.")
+    If failed > 0 Then s = s & vbCr & failed & _
+        Txt(" Stelle(n) konnten wegen Feldern oder {Ae}nderungsmarkierungen nicht ge{ae}ndert werden {-} bitte Vollpr{ue}fung ausf{ue}hren.")
+    If kind = 2 Then s = s & vbCr & vbCr & _
+        Txt("Nicht automatisch ge{ae}ndert: falsch platziertes {q<}; and{q>} und Text nach dem Schlusspunkt (siehe Vollpr{ue}fung).")
+    MsgFormatTextDone = s
+End Function
+
+Public Function MsgFormatLayoutDone(ByVal added As Long, ByVal removed As Long, ByVal indented As Long) As String
+    MsgFormatLayoutDone = Txt("Formatierung angewendet (Schrift, Zeilen- und Absatzabstand).") & vbCr & vbCr & _
+        Txt("Leerabs{ae}tze eingef{ue}gt: ") & added & vbCr & _
+        Txt("Leerabs{ae}tze entfernt: ") & removed & vbCr & _
+        Txt("Einz{ue}ge angepasst: ") & indented
 End Function

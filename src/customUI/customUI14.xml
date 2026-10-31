@@ -35,6 +35,20 @@
                   onAction="OnAction_Report"
                   supertip="Führt die Vollprüfung aus und listet alle Befunde in einem neuen Dokument (das Original bleibt unverändert)."/>
         </group>
+        <group id="grpFormat" label="Format">
+          <button id="btnApplyFormat" label="Formatierung anwenden" size="large" imageMso="FormatPainter"
+                  onAction="OnAction_ApplyFormat"
+                  supertip="Arial 11, Zeilenabstand 1,5, Abstand vor/nach 0 (Werte aus settings.json), Einzüge der Merkmale und genau ein Leerabsatz zwischen den Ansprüchen."/>
+          <button id="btnFixSpaces" label="Doppelte Leerzeichen" imageMso="ReplaceDialog"
+                  onAction="OnAction_FixSpaces"
+                  supertip="Mehrfache Leerzeichen werden zu einem; Leerzeichen vor . , ; : und am Absatzende werden entfernt."/>
+          <button id="btnFixPunctuation" label="Zeichensetzung" imageMso="ParagraphMarks"
+                  onAction="OnAction_FixPunctuation"
+                  supertip="Ergänzt „;“ am Merkmalsende, „; and/; und“ vor dem letzten Merkmal und den Schlusspunkt."/>
+          <button id="btnFixSigns" label="Bezugszeichen-Format" imageMso="Bullets"
+                  onAction="OnAction_FixSigns"
+                  supertip="Vereinheitlicht Bezugszeichen-Gruppen, z. B. „(150; 450)“ → „(150, 450)“."/>
+        </group>
         <group id="grpSettings" label="Einstellungen">
           <button id="btnOpenSettings" label="Einstellungen öffnen" imageMso="PropertySheet"
                   onAction="OnAction_OpenSettings"

@@ -53,7 +53,7 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 ## Roadmap (in order)
 1. ✅ **MVP-1** Claim renumbering + back-reference update (supplementary numbers, position-based mapping, EN+DE references, ranges).
 2. ✅ **MVP-2** Full final claim check → Word comments (author "PatentCheck") + highlight colour per category + "Prüfmarkierungen entfernen" + optional report document.
-3. Formatting fixer.
+3. ✅ Formatting fixer.
 4. Clean version / marked-up version + footer status.
 5. Text blocks (dynamic menu from files `<Subfolder>\NN_Label.docx`, prefix = sort order only; placeholders `[DATUM]`, `[D1]`, ...).
 6. Claim tree, claim merge, dependent-claim skeletons.

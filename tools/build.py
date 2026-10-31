@@ -118,6 +118,51 @@ def check_sources() -> list[str]:
             problems.append(f"{path.relative_to(ROOT)}: VB_Name must equal the file name")
         if not re.search(r"^Option Explicit\s*$", text, re.M):
             problems.append(f"{path.relative_to(ROOT)}: missing Option Explicit")
+        problems += declaration_order_problems(path, text)
+        problems += block_balance_problems(path, text)
+    return problems
+
+
+PROC_START = re.compile(r"^(?:(?:Public|Private|Friend)\s+)?(?:Static\s+)?(?:Sub|Function|Property\s+(?:Get|Let|Set))\s+\w+", re.I)
+MODULE_DECL = re.compile(r"^(?:Public|Private|Global|Dim|Const)\s+(?!Sub\b|Function\b|Property\b|Declare\b)\w+", re.I)
+
+
+def code_lines(text: str):
+    """(line number, code without comment/strings) for every logical line start."""
+    for no, line in enumerate(text.split("\r\n"), 1):
+        code = re.sub(r'"[^"]*"', '""', line)
+        code = code.split("'", 1)[0].rstrip()
+        yield no, code
+
+
+def declaration_order_problems(path: Path, text: str) -> list[str]:
+    """VBA requires module-level declarations before the first procedure."""
+    seen_proc = False
+    for no, code in code_lines(text):
+        if PROC_START.match(code):
+            seen_proc = True
+        elif seen_proc and MODULE_DECL.match(code):
+            return [f"{path.relative_to(ROOT)}:{no}: module-level declaration after the first procedure"]
+    return []
+
+
+def block_balance_problems(path: Path, text: str) -> list[str]:
+    """Cheap structural check: Sub/Function/Property blocks open and close in order."""
+    problems, stack = [], []
+    for no, code in code_lines(text):
+        if PROC_START.match(code):
+            if stack:
+                problems.append(f"{path.relative_to(ROOT)}:{no}: procedure starts inside {stack[-1][0]} (line {stack[-1][1]})")
+            kind = re.search(r"\b(Sub|Function|Property)\b", code, re.I).group(1).lower()
+            stack.append((kind, no))
+        m = re.match(r"^End\s+(Sub|Function|Property)\b", code.strip(), re.I)
+        if m:
+            if not stack or stack[-1][0] != m.group(1).lower():
+                problems.append(f"{path.relative_to(ROOT)}:{no}: unexpected End {m.group(1)}")
+            else:
+                stack.pop()
+    if stack:
+        problems.append(f"{path.relative_to(ROOT)}: {stack[-1][0]} from line {stack[-1][1]} is not closed")
     return problems
 
 

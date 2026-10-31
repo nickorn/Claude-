@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "language": {
     "ui": "de",
     "claimLanguageDetection": "auto"
@@ -11,7 +11,10 @@
     "spaceBefore": 0,
     "spaceAfter": 0,
     "subFeatureIndentCm": 1.25,
-    "applyToWholeDocument": true
+    "applyToWholeDocument": true,
+    "fixEmptyParagraphs": true,
+    "layoutTrackChanges": "silent",
+    "textTrackChanges": "tracked"
   },
   "claims": {
     "labelPattern": "^\\d+[0-9A-Za-z.]*$",

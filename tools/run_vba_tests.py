@@ -34,11 +34,13 @@ MODULES = [
     ROOT / "src/modules/modCheckCommon.bas",
     ROOT / "src/modules/modCheckStructure.bas",
     ROOT / "src/modules/modCheckTerms.bas",
+    ROOT / "src/modules/modFormatText.bas",
     ROOT / "tests/vba/modTestRenumber.bas",
     ROOT / "tests/vba/modTestJson.bas",
     ROOT / "tests/vba/modTestCheck.bas",
+    ROOT / "tests/vba/modTestFormat.bas",
 ]
-TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFixtureTests", "RunCheckFixtureTests"]
+TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFormatTests", "RunFixtureTests", "RunCheckFixtureTests"]
 FIXTURES = ROOT / "tests" / "fixtures"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 

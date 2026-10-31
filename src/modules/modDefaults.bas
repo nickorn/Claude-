@@ -8,7 +8,7 @@ Option Explicit
 Public Function DefaultSettingsJson() As String
     Dim s As String
     s = s & "{" & vbLf
-    s = s & "  ""version"": ""0.3.0""," & vbLf
+    s = s & "  ""version"": ""0.4.0""," & vbLf
     s = s & "  ""language"": {" & vbLf
     s = s & "    ""ui"": ""de""," & vbLf
     s = s & "    ""claimLanguageDetection"": ""auto""" & vbLf
@@ -20,7 +20,10 @@ Public Function DefaultSettingsJson() As String
     s = s & "    ""spaceBefore"": 0," & vbLf
     s = s & "    ""spaceAfter"": 0," & vbLf
     s = s & "    ""subFeatureIndentCm"": 1.25," & vbLf
-    s = s & "    ""applyToWholeDocument"": true" & vbLf
+    s = s & "    ""applyToWholeDocument"": true," & vbLf
+    s = s & "    ""fixEmptyParagraphs"": true," & vbLf
+    s = s & "    ""layoutTrackChanges"": ""silent""," & vbLf
+    s = s & "    ""textTrackChanges"": ""tracked""" & vbLf
     s = s & "  }," & vbLf
     s = s & "  ""claims"": {" & vbLf
     s = s & "    ""labelPattern"": ""^\\d+[0-9A-Za-z.]*$""," & vbLf

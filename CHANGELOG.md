@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0] – 2026-10-31
+### Added
+- MVP-3 Format group: "Formatierung anwenden" (font, size, line spacing, space before/after, sub-feature indents as whole multiples of `subFeatureIndentCm`, exactly one empty paragraph between claims), "Doppelte Leerzeichen" (also spaces before punctuation / at paragraph end), "Zeichensetzung" (";" / ":" / "; and"/"; und" / final full stop), "Bezugszeichen-Format" ("(150; 450)" → "(150, 450)", space before "(").
+- Settings `format.fixEmptyParagraphs`, `format.layoutTrackChanges` (default "silent"), `format.textTrackChanges` (default "tracked").
+- Shared Word helpers `BeginDocWork`/`EndDocWork`, `ApplyTextOps` (replace + insert, verified); build checks for declaration order and Sub/Function block balance.
+
 ## [0.3.0] – 2026-10-31
 ### Added
 - MVP-2 "Vollprüfung": numbering, punctuation (";", "; and"/"; und" before the last feature incl. nested lists, full stop, text after the full stop), spacing (empty paragraphs between claims, double spaces, space before punctuation), formatting (font, size, line spacing, paragraph spacing), back-references (unknown, self, forward), independent claims with same-category references, multiple dependencies (multiple-dependent on multiple-dependent; every one optional), antecedent basis EN/DE along the dependency chain incl. singular/plural, reference signs (same term = same sign, same sign = same term, missing at first mention per claim, format ";"/", "), blacklist, categories (dependent claim of another category, second independent claim of a category).

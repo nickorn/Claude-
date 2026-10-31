@@ -8,6 +8,12 @@ Private mBatchActive As Boolean
 Private mBatchOldName As String
 Private mBatchOldInitials As String
 
+' state of the running command (BeginDocWork / EndDocWork)
+Private mWorkDoc As Document
+Private mWorkView As Variant
+Private mWorkTrack As Boolean
+Private mWorkUndo As Boolean
+
 ' Tool comments carry the author from settings (check.commentAuthor), so that
 ' "Pruefmarkierungen entfernen" can later remove exactly these comments.
 ' For many comments call BeginCommentBatch/EndCommentBatch around them, so the
@@ -283,3 +289,96 @@ Private Function DocPos(ByVal paraStart As Long, ByVal seg As Variant, ByVal vis
         End If
     Next k
 End Function
+
+' ---------------------------------------------------------------- applying text operations
+
+' Applies replace/insert operations (OP_* records; length 0 = insert) from the
+' end backwards. Each replacement is verified against the expected old text.
+' Returns the number applied; failed counts those that could not be applied.
+Public Function ApplyTextOps(ByVal doc As Document, ByVal texts As Variant, ByVal starts As Variant, _
+        ByVal segs As Variant, ByVal ops As Collection, ByRef failed As Long) As Long
+    Dim sorted As Variant, i As Long, op As Variant
+    sorted = SortOps(ops)
+    failed = 0
+    For i = UBound(sorted) To LBound(sorted) Step -1
+        op = sorted(i)
+        If op(OP_KIND) <> OPK_FLAG Then
+            If ApplyReplaceOp(doc, texts, starts, segs, op) Then
+                ApplyTextOps = ApplyTextOps + 1
+            Else
+                failed = failed + 1
+            End If
+        End If
+    Next i
+End Function
+
+Public Function ApplyReplaceOp(ByVal doc As Document, ByVal texts As Variant, ByVal starts As Variant, _
+        ByVal segs As Variant, ByVal op As Variant) As Boolean
+    Dim a As Long, b As Long, rng As Range, p As Long, visLen As Long
+    p = op(OP_PARA)
+    If op(OP_LEN) = 0 Then
+        visLen = Len(texts(p))
+        If op(OP_START) <= visLen Then
+            a = DocPos(starts(p), segs(p), op(OP_START))
+        ElseIf visLen > 0 Then
+            a = DocPos(starts(p), segs(p), visLen)
+            If a >= 0 Then a = a + 1
+        Else
+            a = starts(p)
+        End If
+        If a < 0 Then Exit Function
+        doc.Range(a, a).InsertAfter op(OP_TEXT)
+        ApplyReplaceOp = True
+        Exit Function
+    End If
+    If Not MapSpan(starts, segs, p, op(OP_START), op(OP_LEN), a, b) Then Exit Function
+    Set rng = doc.Range(a, b)
+    If rng.Text <> Mid$(texts(p), op(OP_START), op(OP_LEN)) Then Exit Function
+    rng.Text = op(OP_TEXT)
+    ApplyReplaceOp = True
+End Function
+
+' ---------------------------------------------------------------- document work session
+
+' BeginDocWork/EndDocWork wrap a command: settings reload, screen updating off,
+' inline mark-up view, one undo step; EndDocWork restores everything (also
+' after errors). SetTrackMode "silent" switches Track Changes off meanwhile.
+
+Public Function BeginDocWork(ByVal undoTitle As String) As Document
+    If Documents.Count = 0 Then
+        MsgBox MsgNoDocument(), vbExclamation, AppTitle()
+        Exit Function
+    End If
+    Set mWorkDoc = ActiveDocument
+    ReloadSettings
+    Application.ScreenUpdating = False
+    mWorkTrack = mWorkDoc.TrackRevisions
+    mWorkView = ForceInlineMarkupView(mWorkDoc)
+    If Len(undoTitle) > 0 Then
+        Application.UndoRecord.StartCustomRecord undoTitle
+        mWorkUndo = True
+    End If
+    Set BeginDocWork = mWorkDoc
+End Function
+
+Public Sub SetTrackMode(ByVal mode As String)
+    If mWorkDoc Is Nothing Then Exit Sub
+    If LCase$(mode) = "silent" Then
+        mWorkDoc.TrackRevisions = False
+    Else
+        mWorkDoc.TrackRevisions = mWorkTrack
+    End If
+End Sub
+
+Public Sub EndDocWork()
+    On Error Resume Next
+    EndCommentBatch
+    If Not mWorkDoc Is Nothing Then
+        mWorkDoc.TrackRevisions = mWorkTrack
+        RestoreRevisionView mWorkDoc, mWorkView
+    End If
+    If mWorkUndo Then Application.UndoRecord.EndCustomRecord
+    mWorkUndo = False
+    Set mWorkDoc = Nothing
+    Application.ScreenUpdating = True
+End Sub

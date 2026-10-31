@@ -32,6 +32,22 @@ Public Sub OnAction_Report(control As IRibbonControl)
     RunCheckReport
 End Sub
 
+Public Sub OnAction_ApplyFormat(control As IRibbonControl)
+    ApplyFormatting
+End Sub
+
+Public Sub OnAction_FixSpaces(control As IRibbonControl)
+    FixSpaces
+End Sub
+
+Public Sub OnAction_FixPunctuation(control As IRibbonControl)
+    FixPunctuation
+End Sub
+
+Public Sub OnAction_FixSigns(control As IRibbonControl)
+    FixSignFormat
+End Sub
+
 Public Sub OnAction_OpenSettings(control As IRibbonControl)
     OpenSettingsFile
 End Sub

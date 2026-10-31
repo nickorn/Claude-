@@ -103,12 +103,7 @@ End Sub
 ' Replaces one label; verifies the document still holds the expected text first.
 Private Function ReplaceSpan(ByVal doc As Document, ByVal texts As Variant, ByVal starts As Variant, _
         ByVal segs As Variant, ByVal op As Variant) As Boolean
-    Dim a As Long, b As Long, rng As Range
-    If Not MapSpan(starts, segs, op(OP_PARA), op(OP_START), op(OP_LEN), a, b) Then Exit Function
-    Set rng = doc.Range(a, b)
-    If rng.Text <> Mid$(texts(op(OP_PARA)), op(OP_START), op(OP_LEN)) Then Exit Function
-    rng.Text = op(OP_TEXT)
-    ReplaceSpan = True
+    ReplaceSpan = ApplyReplaceOp(doc, texts, starts, segs, op)
 End Function
 
 Private Sub FlagSpan(ByVal doc As Document, ByVal starts As Variant, ByVal segs As Variant, _

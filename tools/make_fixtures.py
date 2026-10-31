@@ -379,6 +379,27 @@ def write_check_docx(paras, path):
     doc.save(path)
 
 
+def write_versions_fixture(path):
+    """Claims with tracked changes, a comment and footer "Markierte Fassung<TAB>20 187 485.6"."""
+    doc = Document()
+    style = doc.styles["Normal"]
+    style.font.name = "Arial"
+    style.font.size = Pt(11)
+    doc.add_paragraph("Claims")
+    p = doc.add_paragraph()
+    p.add_run("1.\tA method comprising a ")
+    p._p.append(tracked("del", "first ", 900))
+    p._p.append(tracked("ins", "single ", 901))
+    r = p.add_run("step.")
+    doc.add_paragraph("")
+    p2 = doc.add_paragraph("2.\tThe method of claim 1, wherein the step is repeated.")
+    if hasattr(doc, "add_comment"):
+        doc.add_comment(p2.runs, text="Bitte mit dem Erfinder klären.", author="Niklas", initials="NK")
+    footer = doc.sections[0].footer.paragraphs[0]
+    footer.text = "Markierte Fassung\t20 187 485.6"
+    doc.save(path)
+
+
 CHECK_FIXTURES = {
     "check_EN_seeded": check_en_seeded,
     "check_DE_seeded": check_de_seeded,
@@ -407,6 +428,8 @@ def main():
             f"#flags {flags}\n" + "\n".join(new) + "\n", encoding="utf-8")
         n_claims = sum(1 for it in items if it[0] == "claim")
         print(f"{name}: {n_claims} claims, {len(old)} paragraphs, {flags} expected comment(s)")
+    write_versions_fixture(OUT / "versions_tracked_footer.docx")
+    print("versions_tracked_footer: tracked changes, comment, footer status")
     for name, make in CHECK_FIXTURES.items():
         paras, expected = make()
         write_check_docx(paras, OUT / f"{name}.docx")

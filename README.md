@@ -15,7 +15,8 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 | **Vollprüfung, Einzelprüfung, Prüfmarkierungen entfernen, Prüfbericht** (MVP-2) | fertig, in Word noch zu testen |
 | Einstellungen öffnen, Info | fertig |
 | **Formatierung anwenden, Doppelte Leerzeichen, Zeichensetzung, Bezugszeichen-Format** (MVP-3) | fertig, in Word noch zu testen |
-| Reinschrift/markierte Fassung, Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
+| **Reinschrift erzeugen, Markierte Fassung erzeugen, Fußzeile/Status** (Roadmap 4) | fertig, in Word noch zu testen |
+| Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
 
 ### Prüfung – was passiert
 - **Vollprüfung** führt alle in `settings.json` (`check.enabled`) aktivierten Prüfungen aus; **Einzelprüfung** nur eine.
@@ -58,6 +59,7 @@ Falls beim Kompilieren `IRibbonControl` oder `msoFileDialogFolderPicker` unbekan
 - `tests/fixtures/renumber_*.docx` öffnen → *Patent-Tools → Neu nummerieren*. Das erwartete Ergebnis steht in `<Name>.expected.txt` (erste Zeile: Anzahl erwarteter Kommentare).
 - `tests/fixtures/check_*.docx` und `EP20187485_*.docx` öffnen → *Vollprüfung*. Die erwartete Anzahl Befunde je Prüfung steht in `<Name>.check.txt` (die Meldung am Ende zeigt die Zahlen je Prüfung).
 - `renumber_EN_large.docx` (218 Ansprüche) dient auch als Geschwindigkeitstest.
+- `versions_tracked_footer.docx` (vorher speichern!) → *Reinschrift erzeugen*: neues Dokument ohne Änderungen/Kommentar, Fußzeile „Reinschrift⇥20 187 485.6“. *Markierte Fassung erzeugen*: Änderungen bleiben sichtbar, Fußzeile „Markierte Fassung⇥20 187 485.6“. Das Original bleibt jeweils unverändert.
 - Optional die Unit-Tests: `tests/vba/modTestRenumber.bas` und `modTestJson.bas` zusätzlich importieren, Alt+F8 → `PT_RunRenumberTests` / `PT_RunJsonTests`.
 
 **Ohne Word** (Entwicklung, Linux/CI): `python3 tools/run_vba_tests.py` führt die Text-Logik in LibreOffice Basic aus (Unit-Tests + alle Fixtures).

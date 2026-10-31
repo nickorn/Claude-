@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "language": {
     "ui": "de",
     "claimLanguageDetection": "auto"
@@ -73,6 +73,9 @@
       "en": { "markedUp": "Marked-up version", "clean": "Clean version", "inventorApproved": "Approved by inventor" }
     },
     "touchRightFooter": false
+  },
+  "versions": {
+    "markedUpKeepComments": false
   },
   "description": {
     "introPhrases": {

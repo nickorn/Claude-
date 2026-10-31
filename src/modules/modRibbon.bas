@@ -48,6 +48,18 @@ Public Sub OnAction_FixSigns(control As IRibbonControl)
     FixSignFormat
 End Sub
 
+Public Sub OnAction_CleanVersion(control As IRibbonControl)
+    CreateCleanVersion
+End Sub
+
+Public Sub OnAction_MarkedUpVersion(control As IRibbonControl)
+    CreateMarkedUpVersion
+End Sub
+
+Public Sub OnAction_FooterStatus(control As IRibbonControl)
+    SetFooterStatus control.Tag
+End Sub
+
 Public Sub OnAction_OpenSettings(control As IRibbonControl)
     OpenSettingsFile
 End Sub

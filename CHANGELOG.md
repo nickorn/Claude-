@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.0] – 2026-10-31
+### Added
+- Roadmap 4, group "Änderungen": "Reinschrift erzeugen" (new document, all changes accepted, all comments and check marks removed), "Markierte Fassung erzeugen" (new document with Track Changes mark-up, check marks removed, comments per `versions.markedUpKeepComments`), "Fußzeile/Status" menu (Markierte Fassung / Reinschrift / Vom Erfinder freigegeben / Status entfernen) in the claim language. The original is never changed; only the left part of the footer is written, the application number on the right is never touched (TAB layout, two-cell table, or own paragraph if neither fits).
+- Fixture `versions_tracked_footer.docx`; footer planning unit tests.
+
 ## [0.4.0] – 2026-10-31
 ### Added
 - MVP-3 Format group: "Formatierung anwenden" (font, size, line spacing, space before/after, sub-feature indents as whole multiples of `subFeatureIndentCm`, exactly one empty paragraph between claims), "Doppelte Leerzeichen" (also spaces before punctuation / at paragraph end), "Zeichensetzung" (";" / ":" / "; and"/"; und" / final full stop), "Bezugszeichen-Format" ("(150; 450)" → "(150, 450)", space before "(").

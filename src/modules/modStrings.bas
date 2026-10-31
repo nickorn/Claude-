@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.4.0"
+Public Const APP_VERSION As String = "0.5.0"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"
@@ -376,4 +376,44 @@ Public Function MsgFormatLayoutDone(ByVal added As Long, ByVal removed As Long, 
         Txt("Leerabs{ae}tze eingef{ue}gt: ") & added & vbCr & _
         Txt("Leerabs{ae}tze entfernt: ") & removed & vbCr & _
         Txt("Einz{ue}ge angepasst: ") & indented
+End Function
+
+' ---------------------------------------------------------------- versions + footer (roadmap 4)
+
+Public Function UndoTitleFooter() As String
+    UndoTitleFooter = AppTitle() & Txt(": Fu{ss}zeile/Status")
+End Function
+
+Public Function MsgVersionSaveFirst() As String
+    MsgVersionSaveFirst = Txt("Bitte das Dokument zuerst speichern. Die neue Fassung wird aus der gespeicherten Datei erzeugt; ") & _
+        Txt("das Original bleibt unver{ae}ndert.")
+End Function
+
+Public Function MsgVersionAskSave(ByVal docName As String) As String
+    MsgVersionAskSave = Quoted(docName) & Txt(" hat ungespeicherte {Ae}nderungen. Jetzt speichern und die neue Fassung erzeugen?") & _
+        vbCr & vbCr & Txt("(Das Original wird nur gespeichert, nicht ver{ae}ndert.)")
+End Function
+
+Public Function MsgVersionCreated(ByVal status As String) As String
+    MsgVersionCreated = Txt("Neue Fassung erzeugt: ") & Quoted(status) & vbCr & vbCr & _
+        Txt("Das Dokument ist noch nicht gespeichert {-} bitte unter neuem Namen speichern. Das Original ist unver{ae}ndert.")
+End Function
+
+Public Function MsgVersionNoRevisions() As String
+    MsgVersionNoRevisions = Txt("Markierte Fassung erzeugt {-} das Dokument enth{ae}lt jedoch keine nachverfolgten {Ae}nderungen.") & _
+        vbCr & vbCr & Txt("Bitte unter neuem Namen speichern. Das Original ist unver{ae}ndert.")
+End Function
+
+Public Function MsgVersionLostRevisions() As String
+    MsgVersionLostRevisions = Txt("Achtung: Die nachverfolgten {Ae}nderungen wurden nicht in die Kopie {ue}bernommen. ") & _
+        Txt("Bitte die markierte Fassung manuell pr{ue}fen (das Original ist unver{ae}ndert) und diesen Fall melden.")
+End Function
+
+Public Function MsgFooterSet(ByVal status As String, ByVal count As Long) As String
+    If Len(status) = 0 Then
+        MsgFooterSet = Txt("Status in der Fu{ss}zeile entfernt (") & count & Txt(" Fu{ss}zeile(n)).")
+    Else
+        MsgFooterSet = Txt("Fu{ss}zeile links: ") & Quoted(status) & " (" & count & Txt(" Fu{ss}zeile(n)). ") & _
+            Txt("Die rechte Seite (Anmeldenummer) bleibt unver{ae}ndert.")
+    End If
 End Function

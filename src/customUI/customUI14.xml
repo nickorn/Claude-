@@ -49,6 +49,22 @@
                   onAction="OnAction_FixSigns"
                   supertip="Vereinheitlicht Bezugszeichen-Gruppen, z. B. „(150; 450)“ → „(150, 450)“."/>
         </group>
+        <group id="grpVersions" label="Änderungen">
+          <button id="btnCleanVersion" label="Reinschrift erzeugen" size="large" imageMso="ReviewAcceptChange"
+                  onAction="OnAction_CleanVersion"
+                  supertip="Neues Dokument: alle Änderungen angenommen, alle Kommentare entfernt, Fußzeile links „Reinschrift“/„Clean version“. Das Original bleibt unverändert."/>
+          <button id="btnMarkedUpVersion" label="Markierte Fassung erzeugen" size="large" imageMso="ReviewTrackChanges"
+                  onAction="OnAction_MarkedUpVersion"
+                  supertip="Neues Dokument mit den Änderungsmarkierungen, ohne Prüfmarkierungen, Fußzeile links „Markierte Fassung“/„Marked-up version“. Das Original bleibt unverändert."/>
+          <menu id="mnuFooterStatus" label="Fußzeile/Status" imageMso="FooterInsertGallery"
+                supertip="Setzt den Status links in der Fußzeile des aktuellen Dokuments (Sprache = Anspruchssprache). Die rechte Seite (Anmeldenummer) wird nie verändert.">
+            <button id="btnStatusMarkedUp" label="Markierte Fassung" tag="markedUp" onAction="OnAction_FooterStatus"/>
+            <button id="btnStatusClean" label="Reinschrift" tag="clean" onAction="OnAction_FooterStatus"/>
+            <button id="btnStatusApproved" label="Vom Erfinder freigegeben" tag="inventorApproved" onAction="OnAction_FooterStatus"/>
+            <menuSeparator id="sepStatus"/>
+            <button id="btnStatusRemove" label="Status entfernen" tag="" onAction="OnAction_FooterStatus"/>
+          </menu>
+        </group>
         <group id="grpSettings" label="Einstellungen">
           <button id="btnOpenSettings" label="Einstellungen öffnen" imageMso="PropertySheet"
                   onAction="OnAction_OpenSettings"

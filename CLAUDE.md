@@ -55,7 +55,7 @@ CHANGELOG.md              version history; version also shown in ribbon "Info"
 2. ✅ **MVP-2** Full final claim check → Word comments (author "PatentCheck") + highlight colour per category + "Prüfmarkierungen entfernen" + optional report document.
 3. ✅ Formatting fixer.
 4. ✅ Clean version / marked-up version + footer status.
-5. Text blocks (dynamic menu from files `<Subfolder>\NN_Label.docx`, prefix = sort order only; placeholders `[DATUM]`, `[D1]`, ...).
+5. ✅ Text blocks (dynamic menu from files `<Subfolder>\NN_Label.docx`, prefix = sort order only; placeholders `[DATUM]`, `[D1]`, ...).
 6. Claim tree, claim merge, dependent-claim skeletons.
 7. Method ↔ apparatus, claims → description, reference signs strip/insert.
 

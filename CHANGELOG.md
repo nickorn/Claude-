@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.0] – 2026-10-31
+### Added
+- Roadmap 5, group "Textbausteine": dynamic menu built from `textblocks.folder` each time it opens (subfolder = submenu, `NN_Label.docx` shown as "Label", sorted by file name), insertion at the cursor with formatting, placeholder dialog ([DATUM] pre-filled with today's date), unfilled placeholders highlighted; "Ordner öffnen"; "Beispielbausteine importieren…" copies `config/textblocks` without overwriting.
+- Tests incl. a well-formedness check of the generated ribbon XML.
+
 ## [0.5.0] – 2026-10-31
 ### Added
 - Roadmap 4, group "Änderungen": "Reinschrift erzeugen" (new document, all changes accepted, all comments and check marks removed), "Markierte Fassung erzeugen" (new document with Track Changes mark-up, check marks removed, comments per `versions.markedUpKeepComments`), "Fußzeile/Status" menu (Markierte Fassung / Reinschrift / Vom Erfinder freigegeben / Status entfernen) in the claim language. The original is never changed; only the left part of the footer is written, the application number on the right is never touched (TAB layout, two-cell table, or own paragraph if neither fits).

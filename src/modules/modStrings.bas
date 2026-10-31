@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.5.0"
+Public Const APP_VERSION As String = "0.6.0"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"
@@ -416,4 +416,24 @@ Public Function MsgFooterSet(ByVal status As String, ByVal count As Long) As Str
         MsgFooterSet = Txt("Fu{ss}zeile links: ") & Quoted(status) & " (" & count & Txt(" Fu{ss}zeile(n)). ") & _
             Txt("Die rechte Seite (Anmeldenummer) bleibt unver{ae}ndert.")
     End If
+End Function
+
+' ---------------------------------------------------------------- text blocks (roadmap 5)
+
+Public Function UndoTitleTextBlock() As String
+    UndoTitleTextBlock = AppTitle() & Txt(": Textbaustein einf{ue}gen")
+End Function
+
+Public Function MsgTextBlockMissing(ByVal path As String) As String
+    MsgTextBlockMissing = Txt("Der Textbaustein wurde nicht gefunden:") & vbCr & path
+End Function
+
+Public Function MsgPlaceholderPrompt(ByVal name As String) As String
+    MsgPlaceholderPrompt = Txt("Wert f{ue}r den Platzhalter [") & name & "]:" & vbCr & vbCr & _
+        Txt("(Leer lassen oder Abbrechen: Platzhalter bleibt stehen und wird gelb markiert.)")
+End Function
+
+Public Function MsgTextBlocksImported(ByVal count As Long, ByVal folder As String) As String
+    MsgTextBlocksImported = count & Txt(" Textbaustein(e) importiert nach:") & vbCr & folder & vbCr & vbCr & _
+        Txt("Vorhandene Dateien wurden nicht {ue}berschrieben.")
 End Function

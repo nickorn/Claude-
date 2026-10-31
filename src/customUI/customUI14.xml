@@ -65,6 +65,14 @@
             <button id="btnStatusRemove" label="Status entfernen" tag="" onAction="OnAction_FooterStatus"/>
           </menu>
         </group>
+        <group id="grpTextBlocks" label="Textbausteine">
+          <dynamicMenu id="dmTextBlocks" label="Textbausteine" size="large" imageMso="Paste"
+                       getContent="GetContent_TextBlocks" invalidateContentOnDrop="true"
+                       supertip="Fügt einen Textbaustein aus %APPDATA%\PatentTools\textblocks an der Cursorposition ein (Unterordner = Untermenü). Platzhalter wie [DATUM] werden abgefragt."/>
+          <button id="btnOpenTextBlocks" label="Ordner öffnen" imageMso="FileOpen"
+                  onAction="OnAction_OpenTextBlockFolder"
+                  supertip="Öffnet den Textbaustein-Ordner. Neue .docx-Dateien erscheinen sofort im Menü (Name „NN_Bezeichnung.docx“, NN = Sortierung)."/>
+        </group>
         <group id="grpSettings" label="Einstellungen">
           <button id="btnOpenSettings" label="Einstellungen öffnen" imageMso="PropertySheet"
                   onAction="OnAction_OpenSettings"

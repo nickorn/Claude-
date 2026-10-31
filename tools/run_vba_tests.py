@@ -36,13 +36,15 @@ MODULES = [
     ROOT / "src/modules/modCheckTerms.bas",
     ROOT / "src/modules/modFormatText.bas",
     ROOT / "src/modules/modFooterPlan.bas",
+    ROOT / "src/modules/modTextBlocksPlan.bas",
     ROOT / "tests/vba/modTestRenumber.bas",
     ROOT / "tests/vba/modTestJson.bas",
     ROOT / "tests/vba/modTestCheck.bas",
     ROOT / "tests/vba/modTestFormat.bas",
     ROOT / "tests/vba/modTestVersions.bas",
+    ROOT / "tests/vba/modTestTextBlocks.bas",
 ]
-TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFormatTests", "RunVersionTests", "RunFixtureTests", "RunCheckFixtureTests"]
+TEST_FUNCTIONS = ["RunRenumberTests", "RunJsonTests", "RunCheckTests", "RunFormatTests", "RunVersionTests", "RunTextBlockTests", "RunFixtureTests", "RunCheckFixtureTests"]
 FIXTURES = ROOT / "tests" / "fixtures"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
@@ -272,6 +274,26 @@ def check_fixture_function() -> list[str]:
     return lines
 
 
+def check_generated_xml(result: str) -> bool:
+    """The dynamic text-block menu XML built by VBA must be well-formed with unique ids."""
+    import xml.dom.minidom
+    m = re.search(r"XMLSTART(.*)XMLEND", result, re.S)
+    if not m:
+        print("generated menu XML: missing")
+        return False
+    try:
+        dom = xml.dom.minidom.parseString(m.group(1).encode("utf-8"))
+    except Exception as exc:
+        print("generated menu XML: not well-formed:", exc)
+        return False
+    ids = [el.getAttribute("id") for el in dom.getElementsByTagName("*") if el.hasAttribute("id")]
+    if len(ids) != len(set(ids)) or not all(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", i) for i in ids):
+        print("generated menu XML: ids not unique/valid:", ids)
+        return False
+    print("generated menu XML: well-formed,", len(ids), "unique ids")
+    return True
+
+
 def main(timeout: int = 240) -> int:
     if not SOFFICE:
         print("LibreOffice (soffice) not found", file=sys.stderr)
@@ -300,6 +322,7 @@ def main(timeout: int = 240) -> int:
             "    Dim r As String\n"
             "    On Error GoTo Failed\n"
             + "".join(f'    Emit "START {fn}"\n    r = {fn}()\n    Emit r\n' for fn in TEST_FUNCTIONS) +
+            '    Emit "XMLSTART" & SampleMenuXml() & "XMLEND"\n'
             '    Emit "ALL DONE"\n'
             "    Exit Sub\n"
             "Failed:\n"
@@ -339,8 +362,10 @@ def main(timeout: int = 240) -> int:
             print("No test output. LibreOffice said:\n", proc.stdout, proc.stderr, file=sys.stderr)
             return 2
         result = out_file.read_text(encoding="utf-8", errors="replace")
+        xml_ok = check_generated_xml(result)
+        result = re.sub(r"XMLSTART.*XMLEND\n", "", result, flags=re.S)
         print(re.sub(r"^START .*\n", "", result, flags=re.M))
-        ok = len(re.findall(r"Failed: 0\b", result)) == len(TEST_FUNCTIONS) and "ALL DONE" in result
+        ok = len(re.findall(r"Failed: 0\b", result)) == len(TEST_FUNCTIONS) and "ALL DONE" in result and xml_ok
         return 0 if ok else 1
 
 

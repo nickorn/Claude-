@@ -60,6 +60,22 @@ Public Sub OnAction_FooterStatus(control As IRibbonControl)
     SetFooterStatus control.Tag
 End Sub
 
+Public Sub GetContent_TextBlocks(control As IRibbonControl, ByRef returnedVal)
+    returnedVal = TextBlocksMenuContent()
+End Sub
+
+Public Sub OnAction_InsertTextBlock(control As IRibbonControl)
+    InsertTextBlock control.Tag
+End Sub
+
+Public Sub OnAction_OpenTextBlockFolder(control As IRibbonControl)
+    OpenTextBlockFolder
+End Sub
+
+Public Sub OnAction_ImportTextBlocks(control As IRibbonControl)
+    ImportSampleTextBlocks
+End Sub
+
 Public Sub OnAction_OpenSettings(control As IRibbonControl)
     OpenSettingsFile
 End Sub

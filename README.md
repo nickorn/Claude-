@@ -16,7 +16,8 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 | Einstellungen öffnen, Info | fertig |
 | **Formatierung anwenden, Doppelte Leerzeichen, Zeichensetzung, Bezugszeichen-Format** (MVP-3) | fertig, in Word noch zu testen |
 | **Reinschrift erzeugen, Markierte Fassung erzeugen, Fußzeile/Status** (Roadmap 4) | fertig, in Word noch zu testen |
-| Textbausteine, Entwurfshelfer | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
+| **Textbausteine** (Roadmap 5) | fertig, in Word noch zu testen |
+| Entwurfshelfer (Anspruchsbaum, Zusammenführen, …) | in Arbeit (siehe Roadmap in `CLAUDE.md`) |
 
 ### Prüfung – was passiert
 - **Vollprüfung** führt alle in `settings.json` (`check.enabled`) aktivierten Prüfungen aus; **Einzelprüfung** nur eine.
@@ -48,6 +49,8 @@ Einmalig in Word: *Datei → Optionen → Trust Center → Einstellungen für da
 7. `PatentTools.dotm` in den STARTUP-Ordner kopieren: `%APPDATA%\Microsoft\Word\STARTUP`. Word neu starten → Tab „Patent-Tools“ erscheint.
 
 Beim ersten Start legt das Makro `%APPDATA%\PatentTools\` mit `settings.json`, `blacklist.json` und `textblocks\` an.
+
+**Textbausteine einrichten:** *Textbausteine → Beispielbausteine importieren…* → Ordner `config\textblocks` des Repositorys wählen (kopiert die neutralen Beispiele, überschreibt nichts). Eigene Bausteine einfach als `.docx` in den Ordner legen (*Ordner öffnen*), z. B. `EPA\15_Mein Baustein.docx` – erscheint sofort im Menü.
 
 **Update auf eine neue Version:** Schritte 4–7 wiederholen (bei geändertem Menüband vorher eine frische `PatentTools.dotm` verwenden).
 

@@ -291,17 +291,8 @@ Public Sub CheckAntecedentBasis(ByVal findings As Collection)
     If gClaimCount = 0 Then Exit Sub
     PrepareLists
     ReDim own(1 To gClaimCount)
-    ReDim full(1 To gClaimCount)
-
     ' pass 1: everything each claim introduces (parents may come later in the document)
-    For c = 1 To gClaimCount
-        full(c) = "|"
-        For p = gClaimPara(c) To gClaimLastPara(c)
-            For Each ph In ExtractPhrases(gTexts(p), ParaBodyStart(p))
-                If ph(PH_KIND) <> "refer" Then RegisterTerm full(c), CStr(ph(PH_KEY))
-            Next ph
-        Next p
-    Next c
+    CollectIntroducedTerms full
 
     ' pass 2: each "the ..." needs an earlier introduction in the claim or in a parent claim
     For c = 1 To gClaimCount
@@ -328,6 +319,51 @@ Public Sub CheckAntecedentBasis(ByVal findings As Collection)
         Next p
     Next c
 End Sub
+
+' full(c) = all terms introduced anywhere in claim c ("|key|key|...|").
+Private Sub CollectIntroducedTerms(ByRef full() As String)
+    Dim c As Long, p As Long, ph As Variant
+    ReDim full(1 To gClaimCount)
+    For c = 1 To gClaimCount
+        full(c) = "|"
+        For p = gClaimPara(c) To gClaimLastPara(c)
+            For Each ph In ExtractPhrases(gTexts(p), ParaBodyStart(p))
+                If ph(PH_KIND) <> "refer" Then RegisterTerm full(c), CStr(ph(PH_KEY))
+            Next ph
+        Next p
+    Next c
+End Sub
+
+' Terms introduced in claim c and all its parent claims (used by claim merge).
+Public Function TermsOfClaimChain(ByVal c As Long) As String
+    Dim full() As String
+    If gClaimCount = 0 Then Exit Function
+    PrepareLists
+    CollectIntroducedTerms full
+    TermsOfClaimChain = full(c) & AncestorTerms(c, full)
+End Function
+
+' English only: "a"/"an" -> "the" for terms that are already introduced
+' ("comprising a sensor" merged into a claim that has "a sensor").
+Public Function AdjustArticles(ByVal t As String, ByVal terms As String) As String
+    Dim phrases As Collection, i As Long, ph As Variant, det As String, repl As String
+    AdjustArticles = t
+    If gLanguage <> "en" Then Exit Function
+    Set phrases = ExtractPhrases(t, 1)
+    For i = phrases.Count To 1 Step -1
+        ph = phrases(i)
+        If ph(PH_KIND) = "intro" And TermKnown(terms, CStr(ph(PH_KEY))) Then
+            det = ""
+            If LCase$(Mid$(t, ph(PH_START), 2)) = "a " Then det = Mid$(t, ph(PH_START), 1)
+            If LCase$(Mid$(t, ph(PH_START), 3)) = "an " Then det = Mid$(t, ph(PH_START), 2)
+            If Len(det) > 0 Then
+                If Left$(det, 1) = "A" Then repl = "The" Else repl = "the"
+                t = Left$(t, ph(PH_START) - 1) & repl & Mid$(t, ph(PH_START) + Len(det))
+            End If
+        End If
+    Next i
+    AdjustArticles = t
+End Function
 
 ' Terms of all parent claims, recursively (each claim visited once).
 Private Function AncestorTerms(ByVal c As Long, own() As String) As String

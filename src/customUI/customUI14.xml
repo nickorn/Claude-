@@ -8,6 +8,15 @@
                   onAction="OnAction_Renumber"
                   screentip="Ansprüche neu nummerieren"
                   supertip="Nummeriert alle Ansprüche in Dokumentreihenfolge fortlaufend (auch Zusatznummern wie 1a, 1.1) und passt alle Rückbezüge an. Unklare Stellen werden als Kommentar markiert."/>
+          <button id="btnClaimTree" label="Anspruchsbaum" imageMso="Bullets"
+                  onAction="OnAction_ClaimTree"
+                  supertip="Zeigt die Abhängigkeiten aller Ansprüche als Baum in einem neuen Dokument."/>
+          <button id="btnMergeClaims" label="Ansprüche zusammenführen" imageMso="TableInsert"
+                  onAction="OnAction_MergeClaims"
+                  supertip="Übernimmt den abhängigen Anspruch am Cursor in seinen Bezugsanspruch (englisch: „a“ → „the“ bei bereits eingeführten Begriffen), lenkt Rückbezüge um und nummeriert neu."/>
+          <button id="btnDependentClaim" label="Abhängigen Anspruch anlegen" imageMso="Numbering"
+                  onAction="OnAction_DependentClaim"
+                  supertip="Fügt nach dem Anspruch am Cursor „The method according to claim X, wherein“ bzw. „Verfahren nach Anspruch X, wobei“ mit Zusatznummer (z. B. 3a) ein."/>
         </group>
         <group id="grpCheck" label="Prüfung">
           <button id="btnFullCheck" label="Vollprüfung" size="large" imageMso="ReviewNewComment"

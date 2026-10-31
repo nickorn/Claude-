@@ -10,7 +10,7 @@ Option Explicit
 '   {-}                                  en dash
 '   {q<} {q>}                            German quotes (low / high)
 
-Public Const APP_VERSION As String = "0.6.0"
+Public Const APP_VERSION As String = "0.7.0"
 
 Public Function AppTitle() As String
     AppTitle = "Patent-Tools"
@@ -436,4 +436,61 @@ End Function
 Public Function MsgTextBlocksImported(ByVal count As Long, ByVal folder As String) As String
     MsgTextBlocksImported = count & Txt(" Textbaustein(e) importiert nach:") & vbCr & folder & vbCr & vbCr & _
         Txt("Vorhandene Dateien wurden nicht {ue}berschrieben.")
+End Function
+
+' ---------------------------------------------------------------- drafting helpers (roadmap 6)
+
+' kind: 1 = dependent claim skeleton, 2 = merge
+Public Function UndoTitleDraft(ByVal kind As Long) As String
+    If kind = 1 Then
+        UndoTitleDraft = AppTitle() & Txt(": Abh{ae}ngigen Anspruch anlegen")
+    Else
+        UndoTitleDraft = AppTitle() & Txt(": Anspr{ue}che zusammenf{ue}hren")
+    End If
+End Function
+
+Public Function TreeTitle(ByVal docName As String) As String
+    TreeTitle = Txt("Anspruchsbaum {-} ") & docName
+End Function
+
+Public Function TreeSummary(ByVal claimCount As Long, ByVal independentCount As Long) As String
+    TreeSummary = claimCount & Txt(" Anspr{ue}che, davon ") & independentCount & Txt(" unabh{ae}ngig.")
+End Function
+
+Public Function MsgNoClaimAtCursor() As String
+    MsgNoClaimAtCursor = Txt("Bitte den Cursor in einen Anspruch setzen.")
+End Function
+
+Public Function MsgSkeletonInserted(ByVal label As String) As String
+    MsgSkeletonInserted = Txt("Anspruch ") & label & Txt(" angelegt {-} bitte Text erg{ae}nzen und danach {q<}Neu nummerieren{q>}.")
+End Function
+
+Public Function MsgMergeNotDependent() As String
+    MsgMergeNotDependent = Txt("Bitte den Cursor in einen abh{ae}ngigen Anspruch setzen, der sich auf genau einen Anspruch bezieht.")
+End Function
+
+Public Function MsgMergeForward() As String
+    MsgMergeForward = Txt("Der Anspruch bezieht sich auf einen sp{ae}teren Anspruch {-} bitte zuerst den R{ue}ckbezug korrigieren.")
+End Function
+
+Public Function MsgMergeParentEnd(ByVal label As String) As String
+    MsgMergeParentEnd = Txt("Anspruch ") & label & Txt(" endet nicht mit einem Punkt {-} bitte zuerst die Zeichensetzung korrigieren.")
+End Function
+
+Public Function MsgMergeEmpty() As String
+    MsgMergeEmpty = Txt("Der Anspruch enth{ae}lt nach dem R{ue}ckbezug keinen Text, der {ue}bernommen werden k{oe}nnte.")
+End Function
+
+Public Function MsgMergeConfirm(ByVal dLabel As String, ByVal pLabel As String) As String
+    MsgMergeConfirm = Txt("Anspruch ") & dLabel & Txt(" in Anspruch ") & pLabel & Txt(" {ue}bernehmen?") & vbCr & vbCr & _
+        Txt("Anspruch ") & dLabel & Txt(" wird gel{oe}scht, R{ue}ckbez{ue}ge darauf zeigen danach auf ") & pLabel & _
+        Txt(", die Anspr{ue}che werden neu nummeriert. R{ue}ckg{ae}ngig mit Strg+Z.")
+End Function
+
+Public Function MsgMergeDone(ByVal dLabel As String, ByVal pLabel As String, ByVal lang As String) As String
+    MsgMergeDone = Txt("Anspruch ") & dLabel & Txt(" wurde in Anspruch ") & pLabel & Txt(" {ue}bernommen.")
+    If lang = "de" Then
+        MsgMergeDone = MsgMergeDone & vbCr & Txt("Artikel (ein/eine {-}> der/die/das) bitte selbst anpassen.")
+    End If
+    MsgMergeDone = MsgMergeDone & vbCr & Txt("Bitte danach {q<}Zeichensetzung{q>} und {q<}Vollpr{ue}fung{q>} ausf{ue}hren.")
 End Function

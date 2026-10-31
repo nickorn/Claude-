@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.0] – 2026-10-31
+### Added
+- Roadmap 6 in group "Ansprüche": "Anspruchsbaum" (dependency tree as new document; each claim under its first parent, further parents and forward references noted), "Abhängigen Anspruch anlegen" (skeleton "The method according to claim X, wherein" / "Verfahren nach Anspruch X, wobei" with supplementary label after the claim at the cursor), "Ansprüche zusammenführen" (dependent claim at the cursor into its parent: wherein-clauses appended, "further comprising" features added with "; and" moved, EN "a/an" → "the" for introduced terms, references redirected, renumbering).
+- `RenumberDocument` usable inside other commands; unit tests for tree, skeleton and merge.
+
 ## [0.6.0] – 2026-10-31
 ### Added
 - Roadmap 5, group "Textbausteine": dynamic menu built from `textblocks.folder` each time it opens (subfolder = submenu, `NN_Label.docx` shown as "Label", sorted by file name), insertion at the cursor with formatting, placeholder dialog ([DATUM] pre-filled with today's date), unfilled placeholders highlighted; "Ordner öffnen"; "Beispielbausteine importieren…" copies `config/textblocks` without overwriting.

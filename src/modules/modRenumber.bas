@@ -9,49 +9,45 @@ Option Explicit
 ' valid. Tracked deletions are excluded from the visible text, so claim sets that
 ' already contain mark-up are handled correctly.
 '
-' Track Changes (settings: renumber.trackChangesMode):
+' Track Changes (settings: renumber.trackChangesMode, applied via SetTrackMode):
 '   "tracked" - changes follow the document's Track Changes state (recorded if on)
 '   "silent"  - Track Changes is switched off while renumbering
 
 Public Sub RenumberClaims()
-    Dim doc As Document, texts As Variant, starts As Variant, segs As Variant
+    Dim doc As Document, result As Variant, errDesc As String
+    Set doc = BeginDocWork(UndoTitleRenumber())
+    If doc Is Nothing Then Exit Sub
+    On Error GoTo Fail
+    result = RenumberDocument(doc)
+    EndDocWork
+    MsgBox result(1), result(2), AppTitle()
+    Exit Sub
+Fail:
+    errDesc = Err.Description
+    EndDocWork
+    MsgBox MsgUnexpectedError(errDesc), vbCritical, AppTitle()
+End Sub
+
+' Renumbers the document; the caller manages the work session (BeginDocWork),
+' so other commands (e.g. claim merge) can renumber inside their own undo step.
+' Returns Array(ok, message, msgBoxStyle).
+Public Function RenumberDocument(ByVal doc As Document) As Variant
+    Dim texts As Variant, starts As Variant, segs As Variant
     Dim ops As New Collection, sorted As Variant, op As Variant
     Dim errMsg As String, claimCount As Long, i As Long
     Dim labelsChanged As Long, refsChanged As Long, flagCount As Long
-    Dim viewState As Variant, oldTrack As Boolean, undoOpen As Boolean, stateSaved As Boolean
-    Dim errDesc As String
-
-    If Documents.Count = 0 Then
-        MsgBox MsgNoDocument(), vbExclamation, AppTitle()
-        Exit Sub
-    End If
-    Set doc = ActiveDocument
-
-    On Error GoTo Fail
-    ReloadSettings
-    Application.ScreenUpdating = False
-    oldTrack = doc.TrackRevisions
-    viewState = ForceInlineMarkupView(doc)
-    stateSaved = True
 
     ReadVisibleParagraphs doc, texts, starts, segs
     If Not PlanRenumber(texts, ops, errMsg, claimCount) Then
-        RestoreState doc, viewState, oldTrack, undoOpen
-        MsgBox errMsg, vbExclamation, AppTitle()
-        Exit Sub
+        RenumberDocument = Array(False, errMsg, vbExclamation)
+        Exit Function
     End If
     If ops.Count = 0 Then
-        RestoreState doc, viewState, oldTrack, undoOpen
-        MsgBox MsgAlreadyConsecutive(claimCount), vbInformation, AppTitle()
-        Exit Sub
+        RenumberDocument = Array(True, MsgAlreadyConsecutive(claimCount), vbInformation)
+        Exit Function
     End If
 
-    Application.UndoRecord.StartCustomRecord UndoTitleRenumber()
-    undoOpen = True
-    If LCase$(CStr(GetSettingValue("renumber.trackChangesMode", "tracked"))) = "silent" Then
-        doc.TrackRevisions = False
-    End If
-
+    SetTrackMode CStr(GetSettingValue("renumber.trackChangesMode", "tracked"))
     sorted = SortOps(ops)
     BeginCommentBatch
     For i = UBound(sorted) To LBound(sorted) Step -1
@@ -74,29 +70,9 @@ Public Sub RenumberClaims()
                 End If
         End Select
     Next i
-
-    RestoreState doc, viewState, oldTrack, undoOpen
-    MsgBox MsgRenumberDone(claimCount, labelsChanged, refsChanged, flagCount, _
-        CStr(GetSettingValue("check.commentAuthor", "PatentCheck"))), vbInformation, AppTitle()
-    Exit Sub
-
-Fail:
-    errDesc = Err.Description
-    If stateSaved Then RestoreState doc, viewState, oldTrack, undoOpen
-    Application.ScreenUpdating = True
-    MsgBox MsgUnexpectedError(errDesc), vbCritical, AppTitle()
-End Sub
-
-Private Sub RestoreState(ByVal doc As Document, ByVal viewState As Variant, _
-        ByVal oldTrack As Boolean, ByRef undoOpen As Boolean)
-    On Error Resume Next
     EndCommentBatch
-    doc.TrackRevisions = oldTrack
-    RestoreRevisionView doc, viewState
-    If undoOpen Then Application.UndoRecord.EndCustomRecord
-    undoOpen = False
-    Application.ScreenUpdating = True
-End Sub
+    RenumberDocument = Array(True, MsgRenumberDone(claimCount, labelsChanged, refsChanged, flagCount, ToolAuthor()), vbInformation)
+End Function
 
 ' ---------------------------------------------------------------- writing
 

@@ -16,6 +16,18 @@ Public Sub OnAction_Renumber(control As IRibbonControl)
     RenumberClaims
 End Sub
 
+Public Sub OnAction_ClaimTree(control As IRibbonControl)
+    ShowClaimTree
+End Sub
+
+Public Sub OnAction_MergeClaims(control As IRibbonControl)
+    MergeClaimIntoParent
+End Sub
+
+Public Sub OnAction_DependentClaim(control As IRibbonControl)
+    AddDependentClaim
+End Sub
+
 Public Sub OnAction_FullCheck(control As IRibbonControl)
     RunFullCheck
 End Sub

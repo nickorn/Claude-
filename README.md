@@ -13,7 +13,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 |---|---|
 | **Neu nummerieren** (MVP-1) | fertig, in Word noch zu testen |
 | **Vollprüfung, Einzelprüfung, Prüfmarkierungen entfernen, Prüfbericht** (MVP-2) | fertig, in Word noch zu testen |
-| Einstellungen öffnen, Info | fertig |
+| Einstellungen öffnen, Blacklist bearbeiten, Info | fertig |
 | **Formatierung anwenden, Doppelte Leerzeichen, Zeichensetzung, Bezugszeichen-Format** (MVP-3) | fertig, in Word noch zu testen |
 | **Reinschrift erzeugen, Markierte Fassung erzeugen, Fußzeile/Status** (Roadmap 4) | fertig, in Word noch zu testen |
 | **Textbausteine** (Roadmap 5) | fertig, in Word noch zu testen |
@@ -23,7 +23,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 ### Prüfung – was passiert
 - **Vollprüfung** führt alle in `settings.json` (`check.enabled`) aktivierten Prüfungen aus; **Einzelprüfung** nur eine.
 - Jeder Befund wird als Kommentar von „PatentCheck“ mit vorangestelltem Prüfungsnamen (z. B. „[Bezugsbasis] …“) eingefügt und farbig markiert (Farbe je Prüfung: `check.highlightColors`). Die Änderungsverfolgung wird dabei kurz ausgeschaltet, damit keine Formatänderungen aufgezeichnet werden.
-- Vor jeder Prüfung werden die alten Prüfmarkierungen entfernt. **Prüfmarkierungen entfernen** löscht nur Kommentare/Markierungen des Werkzeugs – eigene Kommentare bleiben.
+- Vor jeder Prüfung werden die alten Prüfmarkierungen entfernt. **Prüfmarkierungen entfernen** löscht nur Kommentare/Markierungen des Werkzeugs – eigene Kommentare bleiben. (Eine eigene Texthervorhebung genau an einer markierten Stelle wird dabei ebenfalls zurückgesetzt.)
 - **Prüfbericht** listet alle Befunde als Tabelle in einem neuen Dokument; das Original bleibt unverändert.
 - Ansatz „flag it, you decide“: Lieber ein Hinweis zu viel als einer zu wenig, besonders bei Bezugsbasis und unklaren Begriffen.
 
@@ -47,7 +47,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 1. Repository herunterladen (GitHub → *Code → Download ZIP*). **Vor dem Entpacken:** Rechtsklick auf die ZIP-Datei → *Eigenschaften* → unten „Zulassen“ anhaken → *OK*. Sonst markiert Windows alle Dateien als „aus dem Internet“ und Office blockiert die Makros. Dasselbe für eine separat erhaltene `PatentTools.dotm`.
 2. ZIP entpacken. `PatentTools.dotm` (von Claude geliefert oder mit `python tools/build.py` erzeugt, liegt dann in `build/`) in einen Arbeitsordner legen, z. B. den Desktop – **noch nicht** in den STARTUP-Ordner.
 3. Import-Helfer einmalig in die Normal.dotm holen: Word → Alt+F11 → links „Normal“ markieren → *Datei → Datei importieren…* → `tools/PT_ImportModules.bas`.
-4. In Word die `PatentTools.dotm` über **Datei → Öffnen** öffnen (nicht per Doppelklick – das würde ein neues Dokument daraus erzeugen).
+4. In Word die `PatentTools.dotm` über **Datei → Öffnen** öffnen (nicht per Doppelklick – das würde ein neues Dokument daraus erzeugen). Meldet Word jetzt, das Makro „OnRibbonLoad“ werde nicht gefunden, ist das hier **normal** (der Code ist noch nicht importiert) – mit *OK* schließen, die Schaltflächen des Tabs erst nach Schritt 9 benutzen.
 5. Alt+F8 → `PT_ImportModules` → *Ausführen* → den Ordner `src` des entpackten Repositorys wählen (der Repository-Ordner selbst oder `src\modules` gehen auch). Die Meldung nennt die Zahl der importierten Module; Module, die es in der neuen Version nicht mehr gibt (oder importierte Testmodule), werden dabei entfernt.
 6. Alt+F11 → Menü *Debuggen → Kompilieren von TemplateProject* (bzw. „PatentTools“). Es darf **keine** Meldung erscheinen. Falls doch: Screenshot an Claude.
 7. Strg+S, die `PatentTools.dotm` schließen.
@@ -69,6 +69,7 @@ Word schließen, die neue `PatentTools.dotm` (oder die alte aus dem Arbeitsordne
 | Beim Kompilieren „Mehrdeutiger Name“ | Ein Modul ist doppelt vorhanden (z. B. `modCheck` und `modCheck1`): das doppelte im VBA-Editor entfernen und Schritt 5 wiederholen. |
 | `IRibbonControl` oder `msoFileDialogFolderPicker` unbekannt | VBA-Editor → *Extras → Verweise* → „Microsoft Office 16.0 Object Library“ anhaken. |
 | `PT_ImportModules` meldet einen Fehler | Vorbereitung 1 fehlt, oder die `PatentTools.dotm` ist nicht über *Datei → Öffnen* geöffnet. |
+| „Es ist kein Dokument geöffnet“, obwohl eines offen ist | Das Dokument ist in der *Geschützten Ansicht* (Dateien aus dem Internet/der ZIP): oben auf „Bearbeitung aktivieren“ klicken. |
 | Eine Funktion meldet „Unerwarteter Fehler“ | Mit Strg+Z rückgängig machen und die Meldung samt Testdokument an Claude schicken. |
 
 ## Einstellungen (`%APPDATA%\PatentTools\settings.json`)
@@ -105,7 +106,7 @@ Die Liste unklarer Begriffe steht in `blacklist.json` (`"de"` und `"en"`, ganze 
 
 ## Testen
 
-**In Word** (empfohlen nach jedem Update):
+**In Word** (empfohlen nach jedem Update; die Testdokumente aus dem entpackten Ordner öffnen und ggf. „Bearbeitung aktivieren“):
 - `tests/fixtures/renumber_*.docx` öffnen → *Patent-Tools → Neu nummerieren*. Das erwartete Ergebnis steht in `<Name>.expected.txt` (erste Zeile: Anzahl erwarteter Kommentare).
 - `tests/fixtures/check_*.docx` und `EP20187485_*.docx` öffnen → *Vollprüfung*. Die erwartete Anzahl Befunde je Prüfung steht in `<Name>.check.txt` (die Meldung am Ende zeigt die Zahlen je Prüfung).
 - `renumber_EN_large.docx` (218 Ansprüche) dient auch als Geschwindigkeitstest.
@@ -116,7 +117,7 @@ Die Liste unklarer Begriffe steht in `blacklist.json` (`"de"` und `"en"`, ganze 
   - *Ansprüche → Beschreibung* (Einleitung 2): neues Dokument „According to an embodiment, a method for authorizing a third party is provided, …“.
   - *Anspruchsbaum*: Anspruch 2 unter Anspruch 1.
   - *Bezugszeichen entfernen*, Dokument unter neuem Namen speichern, dann *Bezugszeichen einfügen* → „Ja“ → die **originale** `EP20187485_original.docx` wählen (sie darf dabei nicht geöffnet sein).
-- `versions_tracked_footer.docx` (vorher speichern!) → *Reinschrift erzeugen*: neues Dokument ohne Änderungen/Kommentar, Fußzeile „Reinschrift⇥20 187 485.6“. *Markierte Fassung erzeugen*: Änderungen bleiben sichtbar, Fußzeile „Markierte Fassung⇥20 187 485.6“. Das Original bleibt jeweils unverändert.
+- `versions_tracked_footer.docx` → *Reinschrift erzeugen*: neues Dokument ohne Änderungen/Kommentar, Fußzeile „Reinschrift⇥20 187 485.6“. *Markierte Fassung erzeugen*: Änderungen bleiben sichtbar, Fußzeile „Markierte Fassung⇥20 187 485.6“. Das Original bleibt jeweils unverändert.
 - Optional die Unit-Tests: die Dateien aus `tests/vba/` im VBA-Editor zusätzlich in die `PatentTools.dotm` importieren (*Datei → Datei importieren*), Alt+F8 → `PT_Run…Tests`. Beim nächsten `PT_ImportModules` werden die Testmodule automatisch wieder entfernt.
 
 **Ohne Word** (Entwicklung, Linux/CI): `python3 tools/run_vba_tests.py` führt die Text-Logik in LibreOffice Basic aus (Unit-Tests + alle Fixtures).
@@ -125,8 +126,9 @@ Die Liste unklarer Begriffe steht in `blacklist.json` (`"de"` und `"en"`, ganze 
 
 `src/` ist die Quelle. `python3 tools/build.py`
 - erzeugt `src/modules/modDefaults.bas` aus `config/settings.json` und `config/blacklist.json` (Standardwerte für den ersten Start),
-- prüft die VBA-Quellen (nur ASCII, `Option Explicit`, Modulname = Dateiname),
-- baut `build/PatentTools.dotm` mit dem Menüband aus `src/customUI/customUI14.xml`.
+- prüft die VBA-Quellen (nur ASCII, CRLF, `Option Explicit`, Modulname = Dateiname) und führt `tools/vba_lint.py` aus – die Kompilierprüfung für den Word-Teil (nicht deklarierte Namen, falsche Argumente, ByRef-Typen, Blockstruktur, …),
+- prüft, dass jede Einstellung im Code in `config/settings.json` steht und umgekehrt,
+- prüft das Menüband (Elemente, Attribute, Callbacks in `modRibbon`) und baut `build/PatentTools.dotm` mit dem Menüband aus `src/customUI/customUI14.xml`.
 
 Die VBA-Module kommen anschließend per Import-Helfer in die .dotm (siehe oben), weil `vbaProject.bin` nur Office selbst zuverlässig schreiben kann. `python3 tools/build.py --update <Datei>.dotm` tauscht nur das Menüband in einer bestehenden .dotm aus und behält den importierten Code.
 

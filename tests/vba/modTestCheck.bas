@@ -244,8 +244,8 @@ End Sub
 
 ' ---------------------------------------------------------------- EP 20 187 485.6
 
-Private Function OriginalClaims() As Variant
-    OriginalClaims = L("1.|Method for authorizing a third party, the method comprising:", "", _
+Public Function EpOriginalClaims() As Variant
+    EpOriginalClaims = L("1.|Method for authorizing a third party, the method comprising:", "", _
         "performing, at a first entity:", "", _
         "obtaining (1110) a biometric feature of the third party;", "", _
         "obtaining (1120) a secret value;", "", _
@@ -281,21 +281,21 @@ End Function
 Private Sub TestReferenceOriginal()
     Dim f As Collection
     ' table rows 1, 4, 5, 6 must be found; 7, 8 must NOT be flagged
-    Set f = Run1(OriginalClaims(), "punctuation")
+    Set f = Run1(EpOriginalClaims(), "punctuation")
     ExpectCount "EP orig punctuation", f, 1
     ExpectMsg "EP orig #1 '; and' mid-list", f, "nicht vor dem letzten"
-    Set f = Run1(OriginalClaims(), "spacing")
+    Set f = Run1(EpOriginalClaims(), "spacing")
     ExpectCount "EP orig spacing", f, 1
     ExpectMsg "EP orig #4 space before full stop", f, "Leerzeichen vor"
-    Set f = Run1(OriginalClaims(), "referenceSigns")
+    Set f = Run1(EpOriginalClaims(), "referenceSigns")
     ExpectCount "EP orig signs", f, 2
     ExpectMsg "EP orig #5 missing sign", f, "access controller"
     ExpectMsg "EP orig #6 semicolon", f, ";"
-    ExpectCount "EP orig #7/#8 antecedent", Run1(OriginalClaims(), "antecedentBasis"), 0
-    ExpectCount "EP orig numbering", Run1(OriginalClaims(), "numbering"), 0
-    ExpectCount "EP orig backrefs", Run1(OriginalClaims(), "backReferences"), 0
-    ExpectCount "EP orig independent", Run1(OriginalClaims(), "independentClaims"), 0
-    ExpectCount "EP orig categories", Run1(OriginalClaims(), "categories"), 0
+    ExpectCount "EP orig #7/#8 antecedent", Run1(EpOriginalClaims(), "antecedentBasis"), 0
+    ExpectCount "EP orig numbering", Run1(EpOriginalClaims(), "numbering"), 0
+    ExpectCount "EP orig backrefs", Run1(EpOriginalClaims(), "backReferences"), 0
+    ExpectCount "EP orig independent", Run1(EpOriginalClaims(), "independentClaims"), 0
+    ExpectCount "EP orig categories", Run1(EpOriginalClaims(), "categories"), 0
 End Sub
 
 Private Sub TestReferenceAmended()

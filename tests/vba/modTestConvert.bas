@@ -23,6 +23,7 @@ Public Function RunConvertTests() As String
     TestGerman
     TestDescription
     TestSigns
+    TestReadmePromises
     RunConvertTests = "Passed: " & mPassed & "  Failed: " & mFailed & vbLf & mLog
 End Function
 
@@ -140,6 +141,28 @@ Private Sub TestSigns()
     PlanInsertSigns ops, map
     out = ApplyOpsToTexts(L("1.|A device comprising a sensor and a lens."), ops, flagLog)
     ExpectEq "insert from map", CStr(out(0)), "1." & vbTab & "A device (1) comprising a sensor (10, 11) and a lens (12)."
+End Sub
+
+' What README.md promises for tests/fixtures/EP20187485_original.docx.
+Private Sub TestReadmePromises()
+    Dim res As Variant, plan As Variant
+    Model EpOriginalClaims()
+    res = ConvertClaimCategory(1)
+    Check "readme convert ok", res(0)
+    If res(0) Then
+        ExpectEq "readme convert preamble", CStr(res(2)(0)), "Apparatus for authorizing a third party, the apparatus being configured to:"
+        ExpectEq "readme convert step", CStr(res(2)(2)), "perform, at a first entity:"
+        ExpectEq "readme convert step 2", CStr(res(2)(4)), "obtain (1110) a biometric feature of the third party;"
+        ExpectEq "readme convert group", CStr(res(2)(18)), "the apparatus being further configured to:"
+    End If
+    ExpectEq "readme skeleton", NextSupplementaryLabel(gClaimLabel(2)) & ". " & DependentSkeleton(2), _
+        "2a. The method according to claim 2, wherein "
+    plan = PlanMerge(2)
+    Check "readme merge ok", plan(0)
+    If plan(0) Then Check "readme merge wherein", Left$(plan(3), 25) = ", wherein comparing the d", CStr(plan(3))
+    Check "readme description", InStr(1, ClaimToDescription(1, "According to an embodiment, "), _
+        "According to an embodiment, a method for authorizing a third party is provided, the method comprising:") = 1, _
+        ClaimToDescription(1, "According to an embodiment, ")
 End Sub
 
 Private Function SignLines() As Variant

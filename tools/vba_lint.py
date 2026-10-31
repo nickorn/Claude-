@@ -444,8 +444,10 @@ def main(argv):
         text, lines, public, private, _ = infos[f]
         known = set(owner) | module_names
         if "tests" in f.parts:
-            # test modules see the src publics and their own; the runner shim adds PTDict
-            known |= public
+            # test modules see the src publics and the publics of all test modules
+            for g in files:
+                if "tests" in g.parts:
+                    known |= infos[g][2]
         problems += check_blocks(rel(f), lines)
         problems += check_physical(rel(f), text)
         problems += check_reserved_names(rel(f), lines)

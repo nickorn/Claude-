@@ -48,7 +48,7 @@ Ribbon-Tab „Patent-Tools“ mit VBA-Makros für Patentansprüche (DE/EN): Neun
 2. ZIP entpacken. `PatentTools.dotm` (von Claude geliefert oder mit `python tools/build.py` erzeugt, liegt dann in `build/`) in einen Arbeitsordner legen, z. B. den Desktop – **noch nicht** in den STARTUP-Ordner.
 3. Import-Helfer einmalig in die Normal.dotm holen: Word → Alt+F11 → links „Normal“ markieren → *Datei → Datei importieren…* → `tools/PT_ImportModules.bas`.
 4. In Word die `PatentTools.dotm` über **Datei → Öffnen** öffnen (nicht per Doppelklick – das würde ein neues Dokument daraus erzeugen).
-5. Alt+F8 → `PT_ImportModules` → *Ausführen* → den Ordner `src` des entpackten Repositorys wählen. Die Meldung nennt die Zahl der importierten Module.
+5. Alt+F8 → `PT_ImportModules` → *Ausführen* → den Ordner `src` des entpackten Repositorys wählen (der Repository-Ordner selbst oder `src\modules` gehen auch). Die Meldung nennt die Zahl der importierten Module; Module, die es in der neuen Version nicht mehr gibt (oder importierte Testmodule), werden dabei entfernt.
 6. Alt+F11 → Menü *Debuggen → Kompilieren von TemplateProject* (bzw. „PatentTools“). Es darf **keine** Meldung erscheinen. Falls doch: Screenshot an Claude.
 7. Strg+S, die `PatentTools.dotm` schließen.
 8. **Word ganz schließen.** Die Datei in den STARTUP-Ordner kopieren: im Explorer `%APPDATA%\Microsoft\Word\STARTUP` in die Adresszeile eingeben.
@@ -109,10 +109,15 @@ Die Liste unklarer Begriffe steht in `blacklist.json` (`"de"` und `"en"`, ganze 
 - `tests/fixtures/renumber_*.docx` öffnen → *Patent-Tools → Neu nummerieren*. Das erwartete Ergebnis steht in `<Name>.expected.txt` (erste Zeile: Anzahl erwarteter Kommentare).
 - `tests/fixtures/check_*.docx` und `EP20187485_*.docx` öffnen → *Vollprüfung*. Die erwartete Anzahl Befunde je Prüfung steht in `<Name>.check.txt` (die Meldung am Ende zeigt die Zahlen je Prüfung).
 - `renumber_EN_large.docx` (218 Ansprüche) dient auch als Geschwindigkeitstest.
-- `renumber_EN_small.docx`: Cursor in Anspruch 2 → *Abhängigen Anspruch anlegen* (fügt „2a. The method according to claim 2, wherein“ ein); Cursor in Anspruch 2 → *Ansprüche zusammenführen* (übernimmt ihn in Anspruch 1); *Anspruchsbaum* zeigt die Abhängigkeiten.
-- `EP20187485_original.docx`: Cursor in Anspruch 1 → *Verfahren ↔ Vorrichtung* (fügt Anspruch 3 „Apparatus for authorizing …, the apparatus being configured to: obtain …“ an); *Ansprüche → Beschreibung*; *Bezugszeichen entfernen* und danach *Bezugszeichen einfügen* (Quelle: dieselbe Datei).
+- `EP20187485_original.docx` (Entwurfshelfer; jeweils danach Strg+Z):
+  - Cursor in Anspruch 2 → *Abhängigen Anspruch anlegen*: fügt „2a. The method according to claim 2, wherein “ nach Anspruch 2 ein.
+  - Cursor in Anspruch 2 → *Ansprüche zusammenführen*: hängt „, wherein comparing the decoded biometric feature …“ an Anspruch 1 an und löscht Anspruch 2.
+  - Cursor in Anspruch 1 → *Verfahren ↔ Vorrichtung*: fügt Anspruch 3 „Apparatus for authorizing a third party, the apparatus being configured to:“ mit „perform, at a first entity:“, „obtain (1110) …“ an.
+  - *Ansprüche → Beschreibung* (Einleitung 2): neues Dokument „According to an embodiment, a method for authorizing a third party is provided, …“.
+  - *Anspruchsbaum*: Anspruch 2 unter Anspruch 1.
+  - *Bezugszeichen entfernen*, Dokument unter neuem Namen speichern, dann *Bezugszeichen einfügen* → „Ja“ → die **originale** `EP20187485_original.docx` wählen (sie darf dabei nicht geöffnet sein).
 - `versions_tracked_footer.docx` (vorher speichern!) → *Reinschrift erzeugen*: neues Dokument ohne Änderungen/Kommentar, Fußzeile „Reinschrift⇥20 187 485.6“. *Markierte Fassung erzeugen*: Änderungen bleiben sichtbar, Fußzeile „Markierte Fassung⇥20 187 485.6“. Das Original bleibt jeweils unverändert.
-- Optional die Unit-Tests: `tests/vba/modTestRenumber.bas` und `modTestJson.bas` zusätzlich importieren, Alt+F8 → `PT_RunRenumberTests` / `PT_RunJsonTests`.
+- Optional die Unit-Tests: die Dateien aus `tests/vba/` im VBA-Editor zusätzlich in die `PatentTools.dotm` importieren (*Datei → Datei importieren*), Alt+F8 → `PT_Run…Tests`. Beim nächsten `PT_ImportModules` werden die Testmodule automatisch wieder entfernt.
 
 **Ohne Word** (Entwicklung, Linux/CI): `python3 tools/run_vba_tests.py` führt die Text-Logik in LibreOffice Basic aus (Unit-Tests + alle Fixtures).
 

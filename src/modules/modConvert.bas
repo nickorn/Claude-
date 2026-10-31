@@ -210,7 +210,7 @@ End Sub
 ' collects its term -> sign map. Nothing if cancelled or no signs found.
 Private Function SignMapFromOtherDocument(ByVal lang As String) As Collection
     Dim path As String, src As Document, texts As Variant, starts As Variant, segs As Variant, indents As Variant
-    Dim map As Collection
+    Dim map As Collection, d As Document
     If MsgBox(MsgSignsAskSource(), vbQuestion + vbYesNo, AppTitle()) <> vbYes Then Exit Function
     With Application.FileDialog(msoFileDialogFilePicker)
         .Title = Txt("Dokument mit Bezugszeichen w{ae}hlen")
@@ -218,6 +218,14 @@ Private Function SignMapFromOtherDocument(ByVal lang As String) As Collection
         If .Show <> -1 Then Exit Function
         path = .SelectedItems(1)
     End With
+    ' Documents.Open would return an already open document - and closing it
+    ' afterwards would close the user's work. Only read files that are not open.
+    For Each d In Documents
+        If LCase$(d.FullName) = LCase$(path) Then
+            MsgBox MsgSignsSourceOpen(d.Name), vbExclamation, AppTitle()
+            Exit Function
+        End If
+    Next d
     Set src = Documents.Open(FileName:=path, ReadOnly:=True, AddToRecentFiles:=False, Visible:=False)
     ReadVisibleParagraphs src, texts, starts, segs, indents
     If BuildClaimModel(texts, indents, lang) Then Set map = CollectSignMap()

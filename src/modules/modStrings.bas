@@ -547,3 +547,8 @@ End Function
 Public Function MsgSignsNoneFound() As String
     MsgSignsNoneFound = Txt("Keine Bezugszeichen gefunden.")
 End Function
+
+Public Function MsgSignsSourceOpen(ByVal docName As String) As String
+    MsgSignsSourceOpen = Quoted(docName) & Txt(" ist bereits ge{oe}ffnet. Bitte eine nicht ge{oe}ffnete Datei w{ae}hlen ") & _
+        Txt("(z. B. eine gespeicherte Kopie der Fassung mit Bezugszeichen).")
+End Function

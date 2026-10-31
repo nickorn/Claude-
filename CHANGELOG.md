@@ -1,6 +1,11 @@
 # Changelog
 
 ## [0.8.1] – 2026-10-31
+### Fixed (review 3)
+- "Bezugszeichen einfügen": choosing a source file that is already open in Word would have closed that document without saving – now refused with a message.
+- Import helper: accepts the repository root, `src` or `src\modules`; finds renamed downloads ("PatentTools (1).dotm"); removes `mod*` modules no longer in `src` (e.g. test modules); reminds to compile.
+- README test instructions for the drafting helpers now use `EP20187485_original.docx`; every promised result is covered by a unit test.
+
 ### Added
 - Ribbon "Einstellungen → Blacklist bearbeiten" (was in the ribbon spec, missing so far).
 - README: reference of all settings.
